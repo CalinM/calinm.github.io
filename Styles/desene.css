@@ -1,0 +1,243 @@
+
+                html,body {
+                    padding: 0;
+                    margin: 0;
+                }
+
+                header {
+                    position:fixed;
+                    top:0;
+                    width:100%;
+                    background-color: whitesmoke;
+
+                    font-family: Verdana;
+                    font-size: 10pt;
+
+                    border-bottom: solid thin gray;
+                }
+
+                .selectie-alfabetica {
+                    display: table; 
+                    width: 80%; 
+                    margin: 0 auto;
+                    max-width: 650px;
+                }
+                .element-selectie {
+                    display: table-cell;
+                    text-align: center;
+                    padding-top: 10px;
+                    padding-bottom: 10px;   
+                    cursor: pointer; 
+                    width: 12.5%;
+                }
+                .element-selectie:hover {
+                    background-color: silver;
+                }
+
+                footer {
+                    background-color: #333;
+                    width: 100%;
+                    bottom: 0;
+                    position: fixed;
+                    color: white;
+                    font-size: 8pt;
+                    font-family: Verdana;            
+                }
+
+
+                .movies-wrapper {
+                    padding-top: 100px;
+                    display: flex;
+                    width: 100%;
+                    margin: 0 auto;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-content: center;
+                    align-items: flex-start;
+                }
+
+                .movie-item {
+                    border: solid thin gray;
+                    border-radius: 5px;
+                    width: 180px;
+                    height: 305px;
+                    margin: 10px;
+                }
+
+                .movie-detail-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    justify-content: flex-start;
+                    align-content: center;
+                    align-items: flex-start; 
+                    height: 100%;
+                }
+
+                .movie-detail-wrapper:hover {
+                    -webkit-box-shadow: 0px 0px 13px 3px rgba(0,0,0,0.75);
+                    -moz-box-shadow: 0px 0px 13px 3px rgba(0,0,0,0.75);
+                    box-shadow: 0px 0px 13px 3px rgba(0,0,0,0.75);
+                }
+
+
+                .movie-detail {  
+                }
+
+                .movie-detail:nth-child(1) {
+                    order: 0;
+                    flex: 1 1 auto;
+                    align-self: stretch;
+                }
+
+                .movie-detail:nth-child(2) {
+                    order: 0;
+                    flex: 0 1 25px;
+                    align-self: stretch;
+                    font-family: Open Sans, Segoe UI, Sans Serif;
+                }
+
+                .movie-cover {
+                    display: block;
+                    max-width: 180px;
+                    max-height:280px;
+                }
+                .recomended {
+                    display: inline-block;
+                    float: left;
+                    border-radius: 50%;
+                    width: 14px;
+                    height: 13px;
+                    padding: 2px;
+                    background: #fff;
+                    border: thin solid #666;
+                    color: #666;
+                    text-align: center;
+                    font: 11px Arial, sans-serif;
+                    margin-top: 2px;
+                    margin-left: 3px;
+                    padding-top: 3px;
+                }
+
+                .audio {
+                    display: inline-block;
+                    float: right;
+                    font: 14px  Arial, sans-serif;
+                    padding-top: 4px;
+                    padding-right: 3px;
+                }
+
+                .modal {
+                    display: none; /* Hidden by default */
+                    position: fixed; /* Stay in place */
+                    z-index: 1; /* Sit on top */
+                    padding-top: 100px; /* Location of the box */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    overflow: auto; /* Enable scroll if needed */
+                    background-color: rgba(255,255,255,0.9); /* White w/ opacity */
+                }
+
+                /* Modal Content */
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: auto;
+                    border: 1px solid #888;
+                    width: 80%;
+                    height: 80%;
+                    -webkit-box-shadow: 10px 10px 48px 1px rgba(0,0,0,0.75);
+                    -moz-box-shadow: 10px 10px 48px 1px rgba(0,0,0,0.75);
+                    box-shadow: 10px 10px 48px 1px rgba(0,0,0,0.75);
+                }
+
+                /* The Close Button */
+                .close {
+                    color: #aaaaaa;
+                    font-size: 28px;
+                    font-weight: bold;
+                    border: solid thin gray;
+                    width: 30px;
+                    text-align: center;
+                    border-radius: 3px;    
+                }
+
+                .close:hover,
+                .close:focus {
+                    color: #000;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+
+                .modal-inner-content {
+                    display: table;
+                    height: 100%;
+                    width: 100%;
+                }
+                .title-row {
+                    display: table-row;
+                    background-color: whitesmoke;
+                    height: 50px;
+                }
+                .title-wrapper {
+                    display: table-cell;
+                    vertical-align: middle;
+                    font-family: Open Sans, Segoe UI, Sans Serif;
+                    font-size: 14pt;
+                    font-weight: bold;
+                    padding-left: 10px;
+                }
+                .close-wrapper {
+                    display: table-cell;
+                    vertical-align: middle;
+                    text-align: center;
+                    width: 40px;
+                }
+                .movie-details-wrapper {
+                    display: table-cell; padding-top: 10px;
+                }
+                .movie-details-inner-wrapper {
+                    display: table; height: 100%; width: 100%;
+                }
+                .movie-poster {
+                    display: table-cell;    
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    width: 40%;
+                }
+                .movie-details {
+                    display: table-cell;
+                    background-color: blue;
+                }
+                #recomandat-wrapper {
+                    background: #D83737;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    color:black;
+                    text-align:center;
+                    border: solid 3px white;
+                    font-family:Segoe UI Light;
+                    box-shadow:0px 0px 5px black;
+                    cursor:pointer;
+                    float: right;
+                }
+                #recomandat-wrapper .innerTEXT{
+                  position:relative;
+                  top:5px;
+                  color:white;
+                  font-weight: bold;
+                  text-shadow:2px 2px 2px black;
+                  font-size:150%
+                }
+
+				.detaliu-film {
+					float: left;
+					width: 100%;
+					padding-left: 10px;
+					line-height: 200%;
+					cursor: default;
+				}
