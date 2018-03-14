@@ -6,11 +6,13 @@
 <link type="text/css" rel="stylesheet" href="Styles/sections.css"/>
 <link type="text/css" rel="stylesheet" href="Styles/jsgrid.min.css" />
 <link type="text/css" rel="stylesheet" href="Styles/jsgrid-theme.min.css" />
+<link type="text/css" rel="stylesheet" href="Styles/YouTubePopUp.css">
 
 <script type="text/javascript" src="Scripts/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="Scripts/jquery.lazy.min.js"></script>
 <script type="text/javascript" src="Scripts/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="Scripts/jsgrid.min.js"></script>
+<script type="text/javascript" src="Scripts/YouTubePopUp.jquery.js"></script>
 
 <script type="text/javascript" src="Scripts/desene.js"></script>
 <script type="text/javascript" src="Scripts/detaliiFilme.js"></script>
@@ -48,8 +50,7 @@
     <span data-categ="15" data-titleStartWith="T">T</span> 
     <span data-categ="16" data-titleStartWith="U,V,W,X,Y,Z">U ... Z</span>
     <span data-categ="17" >All (grid)</span>
-  </div>
-  
+  </div>  
 </div>
 
 <div class="sideNav-overlay">
@@ -61,7 +62,14 @@
 <img src="Images\msg.png" class="about-message-img">
 
 <footer>
-    v20170205
+  <table class="footerWrapper">
+    <tr>
+      <td id="genVersion">
+      </td>
+      <td id="snapshotStat" style="width: 100%; text-align: center;">
+      </td>      
+    </tr>
+  </table>
 </footer>
 
 <div id="homeWarning" style="display: none;">
@@ -75,18 +83,15 @@
       </br>
       Feel free to contact me at xxxxxxxx@yyyyyyy.com
     </div>
+
+    <div id="mobileWarning">
+      Also ... it seems you're viewing the site from a mobile device. If so, be aware that it's not optimised for
+      </br>
+      small displays, and some information is only displayed as tooltip!
+    </div>
   </div>
 
   <div id="posterNotFound" style="display: none;">
-    <!-- <div class="imageNotFound">
-      <div class="movieTitle-posterNotFound infoTextPosterNotFound">
-
-      </div>      
-      <div class="infoTextPosterNotFound">
-        poster not found!
-      </div>
-    </div> -->
-
     <div class="imageNotFound" style="display: table;">
       <div style="display: table-row;">
         <div class="movieTitle-posterNotFound infoTextPosterNotFound">
@@ -100,11 +105,6 @@
     </div>    
     </div>
   </div>
-<!-- 
-  <div id="movieDetail" style="display: none;">
-
-  </div> -->
-
 
   <div id="movieDatails" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; padding: 100px; background-color: blue; display: none;">
     Warning!

@@ -18,7 +18,8 @@ $(document).ready(function() {
 	$(".sideNav-overlay,.closebtn").on("click", function() {
 		CloseSideNav();
 	});
-	
+
+
 	$(".sidenav span").on("click", function() {
 		switch($(this).data("categ"))
 		{
@@ -49,56 +50,43 @@ $(document).ready(function() {
 
 				var firstLetters = $(this).data("titlestartwith").split(",");
 				var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0;});
-				var sectionHtml = "";
 
-				// if (isMobile())
-				// {
-				// 	sectionHtml =
-				// 		"<div style=\"width: 100%; display: table;\">";
-						
-				// 		moviesInSection.forEach(function(el) {
-				// 			sectionHtml +=
-				// 				"<div style=\"display: table-row;\">" +
-				// 					"<div style=\"display: table-cell;\" data-movieId=\""+el.Id+"\">" +
-				// 						//the movieId is also placed on the Poster to be visible in the lazy loading process
-				// 						"<img data-src=\"Imgs/poster-"+el.Id+".jpg\" data-movieId=\""+el.Id+"\" class=\"movie-cover lazy\" src=\"Images/pixel.gif\">" +
-				// 					"</div>" +
-				// 					"<div style=\"display: table-cell;\">" +
-				// 						"<div class=recomended>"+el.Recomandat+"</div>" +
-				// 						"<div class=audio>"+el.Audio+"</div>" +
-				// 					"</div>" +
-				// 				"</div>";				
-				// 		}, this);
-					
-				// 	sectionHtml += "</div>";	
-					
-				// 	console.log(sectionHtml);
-				// }
-				// else {
-					sectionHtml =
-						"<div class=\"container\">" +
-							"<div class=\"cards\">";						
-				
-					var mobileClass = isMobile() ? "cardM" : "";
-					moviesInSection.forEach(function(el) {
-						sectionHtml +=
+				var sectionHtml =
+					"<div class=\"container\">" +
+						"<div class=\"cards\">";						
+			
+				var mobileClass = isMobile() ? "cardM" : "";
+				moviesInSection.forEach(function(el) {
+					sectionHtml +=
 							"<div class=\"card " + mobileClass + "\">" +
 								"<div class=\"movie-detail-wrapper\" data-movieId=\""+el.Id+"\">" +
 									"<div class=\"movie-detail\">" +
 										//the movieId is also placed on the Poster to be visible in the lazy loading process
-										"<img data-src=\"Imgs/poster-"+el.Id+".jpg\" data-movieId=\""+el.Id+"\" class=\"movie-cover lazy\" src=\"Images/pixel.gif\">" +
+
+										(
+										el.TrailerVideoId == null || el.TrailerVideoId == ""
+											? "<img data-src=\"Imgs/poster-"+el.Id+".jpg\" data-movieId=\""+el.Id+"\" class=\"movie-cover lazy\" src=\"Images/pixel.gif\">"
+											: "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + el.TrailerVideoId + "'>" + 
+												"<img data-src=\"Imgs/poster-"+el.Id+".jpg\" data-movieId=\""+el.Id+"\" class=\"movie-cover withTrailer lazy\" src=\"Images/pixel.gif\">" +	
+											  "</a>"
+										) + 
 									"</div>" +
 									"<div class=\"movie-detail\">" +
-										"<div class=recomended>"+el.Recomandat+"</div>" +
-										"<div class=audio>"+el.Audio+"</div>" +
+										(el.Recomandat != ""
+											? "<a class='recomended' title='Recomandat: " + el.Recomandat + "&#013Click pentru detalii ...' href='" + el.RecomandatLink + "' target='_blank'>" + el.Recomandat.replace("+", "") + "</a>"
+											: "<div class='recomended' title='Remoandare necunoscuta'>?</div>") +
+										"<a class='recomended info' title='Tematica: " + (el.Tematica == "" ? "-" : el.Tematica) + "&#013An: " + el.An + "&#013Durata: " + (el.DurataStr == "" || el.DurataStr == "00:00:00" ? "?" : el.DurataStr) + "&#013Click pentru detalii ...' href='" + el.MoreInfo + "' target='_blank'>i</a>" +
+										"<div class='quality' title='Dimensiune: " + el.Dimensiune + "&#013Bitrate: " + el.Bitrate + "'>" + (el.Calitate == 0 ? "FHD" : el.Calitate == 1 ? "HD" : "SD") + "</div>" + 
+										"<div class='audio' title='Subtitrari: " + el.Subtitrari + "&#013SursaNl: " + el.NLSource + "'>"+el.Audio+"</div>" +
 									"</div>" +
 								"</div>" +
 							"</div>";				
-					}, this);
+				}, this);
+
+				sectionHtml += 
+						"</div>" +
+					"</div>";
 					
-					sectionHtml += "</div>" + "</div>";
-				//}
-						
 				
 				$("#sections-wrapper").scrollTop(0);
 				$("#sections-wrapper").html(sectionHtml);
@@ -108,13 +96,9 @@ $(document).ready(function() {
 					$("#sections-wrapper .lazy").lazy({
 						appendScroll: $("#sections-wrapper"),
 						onError: function(element) {
-							// console.log(element);
-							// $(element).parent().addClass("imageNotFound");
-
 							var movieId = $(element).data("movieid");
-							//var movieCard = $(".movie-detail-wrapper[data-movieid=\""+movieId+"\"]");
 							var movieCard = $(".movie-detail-wrapper[data-movieid=\""+movieId+"\"] .movie-detail:first");
-							console.log(movieCard);
+
 							movieCard.html($("#posterNotFound").html());
 	
 							var movieWithoutPoster = $.grep(detaliiFilme, function (el) { return el.Id == movieId});
@@ -128,20 +112,12 @@ $(document).ready(function() {
 						height: $("#sections-wrapper").height()
 					});
 
-					$(".card").on("click", function(){
-						console.log("aaa");
-					});
-
+					$(".movieTrailerLink").YouTubePopUp();
 				}, 100);
 
 				CloseSideNav();
 				$(".about-message-img").css("display", "none");
 
-				$(".movie-detail-wrapper").on("click", function() {
-					ShowMovieDetails($(this).data("movieid"));
-				});
-
-				
 				break;
 
 			case 17:
@@ -243,9 +219,6 @@ $(document).ready(function() {
 					{Name: "SD", Id: 2}
 				];
 					
-				//console.log(db.distinctTematica);
-				//console.log(db.distinctRecomandat);
-
 				//https://github.com/tabalinas/jsgrid/issues/60
 				//https://stackoverflow.com/questions/35887675/empty-option-when-filtering
 				
@@ -410,17 +383,6 @@ $(document).ready(function() {
 			}
 		}	
 	});	
-
-
-
-
-
-	// if (window.addEventListener) {
-	// 	window.addEventListener("message", onMessage, false);        
-	// } 
-	// else if (window.attachEvent) {
-	// 	window.attachEvent("onmessage", onMessage, false);
-	// }
 });
 
 function setPageCount() {
@@ -453,86 +415,39 @@ function DisplayHome() {
 	$("#sections-wrapper").html($("#homeWarning").html());
 	$("#moviesSections span").removeClass("selected-subSection");
 	$(".about-message-img").css("display", "");
+
+	$("#genVersion").html("v" + detaliiGenerare);
+	$("#snapshotStat").html(detaliiLista);
+
+	$("#mobileWarning").css("display", isMobile() ? "block" : "none");
 }
 
 function CloseSideNav() {
 	$("#sideNav").css("width", "0");
 	$(".sideNav-overlay").css("display", "none");
-
-	//if ($("#moviesSection")) {
-		$("#sections-wrapper").removeClass("sideNav-overlay-content-transform")
-	//}   
+	$("#sections-wrapper").removeClass("sideNav-overlay-content-transform")  
 };
 
 function ResizeMoviesSection() {
 	var h = window.innerHeight - $(".master-toolbar").outerHeight() - $("footer").height();
-	//$(".slimScrollDiv").height(h);
 	$("#sections-wrapper").height(h);
+
+	$("#sections-wrapper").slimScroll({
+		height: h
+	});
 
 	//not working ok?
 	if ($("#jsGrid").length > 0) {
-		$("#jsGrid").height($("#sections-wrapper").height() - $(".jsgrid-pager-container").height() -1);
+		var gridWrapperHeight = h - $(".jsgrid-pager-container").height() - 1;	
+		$("#jsGrid").height(gridWrapperHeight);
+
+		setTimeout(function() {
+			$(".jsgrid-grid-body").height(gridWrapperHeight - $(".jsgrid-grid-header").height())
+		}, 100); 
 	}
 }
 
 function isMobile() {
     var a = navigator.userAgent||navigator.vendor||window.opera;
     return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4));
-}
-
-function ShowMovieDetails(movieId) {
-	console.log(movieId);
-		
-
-	// $("#moviewDetails-wrapper").css("width", "50%");
-	$("#moviesSection-wrapper").removeClass("frame-resize-details-hidden");
-	$("#moviesSection-wrapper").addClass("frame-resize-details-visible");
-}
-
-function HideMovieDetails(movieId) {
-	console.log(movieId);
-		
-	// $("#moviewDetails-wrapper").css("width", "0");
-	$("#moviesSection-wrapper").removeClass("frame-resize-details-visible");
-	$("#moviesSection-wrapper").addClass("frame-resize-details-hidden");
-}
-
-
-	function onMessage(event) {
-		// Check sender origin to be trusted
-		//if (event.origin !== "http://example.com") return;
-
-		var data = event.data;
-
-		if (typeof(window[data.func]) == "function") {
-			window[data.func].call(null, data.message);
-		}
-	}
-
-	// Function to be called from iframe
-	function parentFunc(message) {
-		alert(message);
-	}	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function scrollIntoView(eleID) {
-   var e = document.getElementById(eleID);
-   if (!!e && e.scrollIntoView) {
-       e.scrollIntoView();
-   }
 }
