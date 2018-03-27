@@ -1,5 +1,5 @@
 
-html,body {
+html, body {
     padding: 0;
     margin: 0;
     height: 100%;
@@ -32,8 +32,8 @@ html,body {
     border-bottom: 0.125em solid rgba(255,86,39,1);
     margin: 0 auto;
     cursor: pointer;
-
 }
+
 .title-wrapper {
     display: table-cell;
     vertical-align: middle;
@@ -73,38 +73,38 @@ html,body {
     box-shadow: rgba(0, 0, 0, 0.9) 0px 15px 15px;
 }
 
-.sidenav span {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-    font-family: 'Open Sans Condensed', sans-serif;
-}
+    .sidenav span {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+        font-family: 'Open Sans Condensed', sans-serif;
+    }
 
-.sidenav div {
-  padding: 16px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: white;
-  display: block;
-  transition: 0.3s;
-  font-family: 'Open Sans Condensed', sans-serif;
-}
+    .sidenav div {
+        padding: 16px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+        font-family: 'Open Sans Condensed', sans-serif;
+    }
 
 .sidenav-subsection {
-  text-align: center;
-  padding-right: 32px !important;
+    text-align: center;
+    padding-right: 32px !important;
 }
 
-.sidenav span:hover{
-  color: #f1f1f1;
-  cursor: pointer;
+.sidenav span:hover {
+    color: #f1f1f1;
+    cursor: pointer;
 }
 
 .selectedNavOpt {
-  color: #f1f1f1 !important;
+    color: #f1f1f1 !important;
 }
 
 .sidenav .closebtn {
@@ -116,18 +116,23 @@ html,body {
 }
 
 @media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav a {
+            font-size: 18px;
+        }
 }
 
 .sideNav-overlay {
-  position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom: 0;
-  display: none;
-  z-index: 5000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    z-index: 5000;
 }
 
 .sideNav-overlay-content-transform {
@@ -139,6 +144,7 @@ html,body {
     from {
         opacity: 1
     }
+
     to {
         opacity: 0.3;
         filter: grayscale(100%);
@@ -146,13 +152,13 @@ html,body {
 }
 
 footer {
-  background-color: #333;
-  width: 100%;
-  bottom: 0;
-  position: fixed;
-  color: white;
-  font-size: 8pt;
-  font-family: Verdana;            
+    background-color: #333;
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+    color: white;
+    font-size: 8pt;
+    font-family: Verdana;
 }
 
 #sections-wrapper {
@@ -165,9 +171,10 @@ footer {
 .selected-subSection {
     font-weight: bold;
 }
-.selected-subSection:before {
-    content: "> ";
-}
+
+    .selected-subSection:before {
+        content: "> ";
+    }
 
 .aboutPage-warning-title {
     width: 100%;
@@ -186,12 +193,18 @@ footer {
     right: 10px;
     bottom: 20px;
     opacity: 0.03;
-  }
-  .jsgrid-cell {cursor: default!important;}
-  .jsgrid-grid-body {overflow-y: auto!important;}
+}
+
+.jsgrid-cell {
+    cursor: default !important;
+}
+
+.jsgrid-grid-body {
+    overflow-y: auto !important;
+}
 
 
-.footerWrapper{
+.footerWrapper {
     width: 100%;
     border-collapse: collapse;
     font-size: 8pt;
@@ -200,7 +213,7 @@ footer {
 }
 
 .withTrailer {
-    cursor: help;      
+    cursor: help;
 }
 
 #mobileWarning {
@@ -211,66 +224,60 @@ footer {
 
 
 #searchCtrl {
-	outline: none;
-	-webkit-appearance: textfield;
-	-webkit-box-sizing: content-box;
-	font-family: inherit;
-	font-size: 100%;	
-	font-family: 'Verdana';
-	
-			background: antiquewhite url("../Images/search.png") no-repeat 9px center;
-	border: solid 1px rgba(255,86,39,1);
-	padding: 9px 10px 9px 32px;
-	width: 55px;
-
-	-webkit-border-radius: 10em;
-	-moz-border-radius: 10em;
-	border-radius: 10em;
-
-	-webkit-transition: all .5s;
-	-moz-transition: all .5s;
-	transition: all .5s;
-	float:right	;
-	
-	
-		width: 18px;
-	padding-left: 10px;
-	color: transparent;
-	cursor: pointer;
-	font-family: Verdana;
-
-}
-#searchCtrl:hover {
-	background-color: #fff;
+    outline: none;
+    -webkit-appearance: textfield;
+    -webkit-box-sizing: content-box;
+    font-family: inherit;
+    font-size: 100%;
+    font-family: 'Verdana';
+    background: antiquewhite url("../Images/search.png") no-repeat 9px center;
+    border: solid 1px rgba(255,86,39,1);
+    padding: 9px 10px 9px 32px;
+    width: 55px;
+    -webkit-border-radius: 10em;
+    -moz-border-radius: 10em;
+    border-radius: 10em;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    transition: all .5s;
+    float: right;
+    width: 18px;
+    padding-left: 10px;
+    color: transparent;
+    cursor: pointer;
+    font-family: Verdana;
 }
 
-#searchCtrl::-webkit-input-placeholder {
-	color:transparent;
-}
-#searchCtrl::focus:-moz-placeholder { 
-	color:transparent;
-}
+    #searchCtrl:hover {
+        background-color: #fff;
+    }
 
-#searchCtrl.focus {
-	background-color: #fff;
+    #searchCtrl::-webkit-input-placeholder {
+        color: transparent;
+    }
 
-	-webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
-	-moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
-	box-shadow: 0 0 5px rgba(109,207,246,.5);
-	  
-	width: 200px;
-	padding-left: 32px;
-	color: #000;
-	background-color: #fff;
-	cursor: auto;
-}
+    #searchCtrl::focus:-moz-placeholder {
+        color: transparent;
+    }
 
-#searchCtrl.focus::-webkit-input-placeholder {
-	color: gray;
-	font-style: italic;
-}
-#searchCtrl.focus::focus:-moz-placeholder {
-	color: gray;
-	font-style: italic;
-}
+    #searchCtrl.focus {
+        background-color: #fff;
+        -webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+        -moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
+        box-shadow: 0 0 5px rgba(109,207,246,.5);
+        width: 200px;
+        padding-left: 32px;
+        color: #000;
+        background-color: #fff;
+        cursor: auto;
+    }
 
+        #searchCtrl.focus::-webkit-input-placeholder {
+            color: gray;
+            font-style: italic;
+        }
+
+        #searchCtrl.focus::focus:-moz-placeholder {
+            color: gray;
+            font-style: italic;
+        }

@@ -10,59 +10,59 @@ $(document).ready(function () {
             $("#sections-wrapper").addClass("sideNav-overlay-content-transform")
         }
     });
-	
+
 	var displaySearchResult = function(s) {
 		$(s).attr("updated", "false");
-		
+
 		var searchedString = $(s).val().toLowerCase();
 		var titlesMatchingSearchCriteria = $.grep(detaliiFilme, function (el) { return el.Titlu.toLowerCase().indexOf(searchedString) >= 0; });
-		buildMoviesSection(titlesMatchingSearchCriteria);			
+		buildMoviesSection(titlesMatchingSearchCriteria);
 	}
-	
+
 	var handleCancelSearch = function(s) {
 		$(s).removeClass("focus");
-		
+
 		var prevSelectedMoviesSection = $("#moviesSections .selected-subSection")[0];
 		if (prevSelectedMoviesSection != null)
 		{
 			var firstLetters = $(prevSelectedMoviesSection).data("titlestartwith").split(",");
 			var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
-	
-			buildMoviesSection(moviesInSection);			
+
+			buildMoviesSection(moviesInSection);
 		}
 		else {
 			DisplayHome();
-		}		
+		}
 	}
-	
+
 	$("#searchCtrl").on("focus" , function() {
 		$(this).addClass("focus");
 	});
-	
+
 	$("#searchCtrl").on("focusout" , function() {
 		if ($(this).val() == "") {
 			handleCancelSearch($(this));
 		}
 		else {
 			if ($(this).attr("updated") != "false")
-				displaySearchResult($(this));	
+				displaySearchResult($(this));
 		}
 	});
-	
+
 	$("#searchCtrl").on("keyup" , function(e) {
 		if (e.keyCode != 13)
 			$(this).attr("updated", "true");
 		else
 			displaySearchResult($(this));
-	});	
-	
+	});
+
 	$("#searchCtrl").on("search" , function() {
 		if ($(this).val() == "")
 		{
 			handleCancelSearch($(this));
 		}
-	});	
-	
+	});
+
 
     $(".closebtn").on("click", function () {
         $("#sideNav").css("width", "0");
@@ -73,7 +73,7 @@ $(document).ready(function () {
     });
 
 
-	var buildMoviesSection = function(moviesInSection) {	
+	var buildMoviesSection = function(moviesInSection) {
 		var sectionHtml =
 			"<div class=\"container\">" +
 			"<div class=\"cards\">";
@@ -108,8 +108,8 @@ $(document).ready(function () {
 
 		sectionHtml +=
 			"</div>" +
-			"</div>";		
-		
+			"</div>";
+
 		$("#sections-wrapper").scrollTop(0);
 		$("#sections-wrapper").html(sectionHtml);
 
@@ -134,13 +134,13 @@ $(document).ready(function () {
 			});
 
 			$(".movieTrailerLink").YouTubePopUp();
-		}, 100);	
-		
+		}, 100);
+
 		CloseSideNav();
 		$(".about-message-img").css("display", "none");
 	}
 
-	
+
     $(".sidenav span").on("click", function () {
         switch ($(this).data("categ")) {
             case -1:	//back from subcategories
@@ -174,7 +174,7 @@ $(document).ready(function () {
 
 				var firstLetters = $(this).data("titlestartwith").split(",");
 				var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
-		
+
 				buildMoviesSection(moviesInSection);
                 break;
 
@@ -633,7 +633,7 @@ $(document).ready(function () {
 
             case 4: //Collections
                 $(".about-message-img").css("display", "none");
-                $("#sections-wrapper").html("<div style=\"font-size: 72px; padding-top: 150px;\" title=\"No data available ... yet!\">😔</div>");
+                $("#sections-wrapper").html("<div style=\"font-size: 72px; padding-top: 150px;\" title=\"No data available ... yet!\">ðŸ˜”</div>");
                 $("#snapshotStat").html("Nothing to see here ... :(");
 
                 $("#moviesSections span").removeClass("selected-subSection");
