@@ -12,6 +12,10 @@ $(document).ready(function () {
     });
 
 	var displaySearchResult = function(s) {
+        if (searchResultTimer != null) {
+            clearInterval(searchResultTimer);
+        }
+
 		$(s).attr("updated", "false");
 
 		var searchedString = $(s).val().toLowerCase();
@@ -25,10 +29,17 @@ $(document).ready(function () {
 		var prevSelectedMoviesSection = $("#moviesSections .selected-subSection")[0];
 		if (prevSelectedMoviesSection != null)
 		{
-			var firstLetters = $(prevSelectedMoviesSection).data("titlestartwith").split(",");
-			var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
-
-			buildMoviesSection(moviesInSection);
+            if ($(prevSelectedMoviesSection).data("titlestartwith") != null)
+            {
+                var firstLetters = $(prevSelectedMoviesSection).data("titlestartwith").split(",");
+                var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
+    
+                buildMoviesSection(moviesInSection);               
+            }
+            else
+            {
+                buildMoviesGridSection();
+            }
 		}
 		else {
 			DisplayHome();
@@ -40,25 +51,45 @@ $(document).ready(function () {
 	});
 
 	$("#searchCtrl").on("focusout" , function() {
-		if ($(this).val() == "") {
-			handleCancelSearch($(this));
-		}
-		else {
-			if ($(this).attr("updated") != "false")
-				displaySearchResult($(this));
-		}
+        if ($(this).val() == "") {
+            if ($(this).attr("updated") == "true") {
+                handleCancelSearch($(this));
+            }
+            else {
+                $(this).removeClass("focus");
+            }
+        }
+        else {
+            if ($(this).attr("updated") == "true") {
+                displaySearchResult($(this));
+            }
+        }
 	});
 
+    var searchResultTimer = null;
 	$("#searchCtrl").on("keyup" , function(e) {
-		if (e.keyCode != 13)
-			$(this).attr("updated", "true");
-		else
+		if (e.keyCode != 13) {
+            var sender = $(this);
+            sender.attr("updated", "true");
+
+            if (searchResultTimer != null) {
+                clearInterval(searchResultTimer);
+            }
+
+            searchResultTimer = setInterval(function() {
+                displaySearchResult(sender);
+            },
+            1000);
+        }
+		else {
 			displaySearchResult($(this));
+        }
 	});
 
 	$("#searchCtrl").on("search" , function() {
 		if ($(this).val() == "")
 		{
+            $(this).trigger("blur");
 			handleCancelSearch($(this));
 		}
 	});
@@ -73,41 +104,45 @@ $(document).ready(function () {
     });
 
 
-	var buildMoviesSection = function(moviesInSection) {
+	var buildMoviesSection = function(moviesInSection) {       
 		var sectionHtml =
 			"<div class=\"container\">" +
-			"<div class=\"cards\">";
+			    "<div class=\"cards\">";
 
 		var mobileClass = isMobile() ? "cardM" : "";
 		moviesInSection.forEach(function (el) {
 			sectionHtml +=
-				"<div class=\"card " + mobileClass + "\">" +
-				"<div class=\"movie-detail-wrapper\" data-movieId=\"" + el.Id + "\">" +
-				"<div class=\"movie-detail\">" +
-				//the movieId is also placed on the Poster to be visible in the lazy loading process
+                    "<div class=\"card " + mobileClass + "\">" +
+                        "<div class=\"movie-detail-wrapper\" data-movieId=\"" + el.Id + "\">" +
+                            "<div class=\"movie-detail\">" +
+                                //the movieId is also placed on the Poster to be visible in the lazy loading process
 
-				(
-					el.TrailerVideoId == null || el.TrailerVideoId == ""
-						? "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\">"
-						: "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + el.TrailerVideoId + "'>" +
-						"<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover withTrailer lazy\" alt=\"Loading poster ...\">" +
-						"</a>"
-				) +
-				"</div>" +
-				"<div class=\"movie-detail\">" +
-				(el.Recomandat != ""
-					? "<a class='recommended' title='Recomandat: " + el.Recomandat + "&#013Click for details ...' href='" + el.RecomandatLink + "' target='_blank'>" + el.Recomandat.replace("+", "") + "</a>"
-					: "<div class='recommended' title='Recomandare necunoscuta'>?</div>") +
-				"<a class='recommended info' title='Tematica: " + (el.Tematica == "" ? "-" : el.Tematica) + "&#013An: " + el.An + "&#013Durata: " + (el.DurataStr == "" || el.DurataStr == "00:00:00" ? "?" : el.DurataStr) + "&#013Click for details ...' href='" + el.MoreInfo + "' target='_blank'>i</a>" +
-				"<div class='quality' title='Dimensiune: " + el.Dimensiune + "&#013Bitrate: " + el.Bitrate + "'>" + (el.Calitate == 0 ? "FHD" : el.Calitate == 1 ? "HD" : "SD") + "</div>" +
-				"<div class='audio' title='Subtitrari: " + el.Subtitrari + "&#013SursaNl: " + el.NLSource + "'>" + el.Audio + "</div>" +
-				"</div>" +
-				"</div>" +
-				"</div>";
+                                (
+                                    el.TrailerVideoId == null || el.TrailerVideoId == ""
+                                        ? "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\">"
+                                        : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + el.TrailerVideoId + "'>" +
+                                        "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover withTrailer lazy\" alt=\"Loading poster ...\">" +
+                                        "</a>"
+                                ) +
+
+                            "</div>" +
+                            "<div class=\"movie-detail\">" +
+                                (
+                                    el.Recomandat != ""
+                                        ? "<a class='recommended' title='Recomandat: " + el.Recomandat + "&#013Click for details ...' href='" + el.RecomandatLink + "' target='_blank'>" + el.Recomandat.replace("+", "") + "</a>"
+                                        : "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
+                                    ) +
+
+                                    "<a class='recommended info' title='Tematica: " + (el.Tematica == "" ? "-" : el.Tematica) + "&#013An: " + el.An + "&#013Durata: " + (el.DurataStr == "" || el.DurataStr == "00:00:00" ? "?" : el.DurataStr) + "&#013Click for details ...' href='" + el.MoreInfo + "' target='_blank'>i</a>" +
+                                    "<div class='quality' title='Dimensiune: " + el.Dimensiune + "&#013Bitrate: " + el.Bitrate + "'>" + (el.Calitate == 0 ? "FHD" : el.Calitate == 1 ? "HD" : "SD") + "</div>" +
+                                    "<div class='audio' title='Subtitrari: " + el.Subtitrari + "&#013SursaNl: " + el.NLSource + "'>" + el.Audio + "</div>" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>";
 		}, this);
 
 		sectionHtml +=
-			"</div>" +
+			    "</div>" +
 			"</div>";
 
 		$("#sections-wrapper").scrollTop(0);
@@ -138,8 +173,257 @@ $(document).ready(function () {
 
 		CloseSideNav();
 		$(".about-message-img").css("display", "none");
-	}
+    }
+    
+    var buildMoviesGridSection = function() {
+        var sectionHtml =
+            "<div id=\"jsGrid\"></div>" +
+            "<div id=\"jsGridPager\">" +
+                "<div style=\"display:table-row;\">" +
+                    "<div id=\"pager-wrapper\">" +
+                    "</div>" +
+                    "<div id=\"pager-customOptions\">" +
+                        "<div style=\"display: inline-block;\">" +
+                            "Page size:" +
+                        "</div>" +
+                        "<div style=\"display: inline-block; padding-left: 5px;\">" +
+                        "<select id=\"gridPageCount\" onchange=\"setPageCount()\">" +
+                            "<option value=\"10\">10</option>" +
+                            "<option value=\"20\" selected=\"selected\">20</option>" +
+                            "<option value=\"50\">50</option>" +
+                            "<option value=\"100\">100</option>" +
+                        "</select>" +
+                    "</div>" +
+                    "</div>	" +
+                "</div>" +
+            "</div>";
 
+        $("#sections-wrapper").html(sectionHtml);
+
+        var db = {
+            loadData: function (filter) {
+                return $.grep(detaliiFilme, function (el) {
+                    return (!filter.Titlu || el.Titlu.toLowerCase().indexOf(filter.Titlu.toLowerCase()) > -1)
+                        && (!filter.An || el.An == filter.An)
+                        && (!filter.Recomandat || el.Recomandat.indexOf(filter.Recomandat) > -1)
+                        && (!filter.Audio || el.Audio.toLowerCase().indexOf(filter.Audio.toLowerCase()) > -1)
+                        && (!filter.Subtitrari || el.Subtitrari.toLowerCase().indexOf(filter.Subtitrari.toLowerCase()) > -1)
+                        && (!filter.Tematica || el.Tematica.indexOf(filter.Tematica) > -1)
+                        && (!filter.Calitate || el.Calitate == filter.Calitate);
+                });
+            }
+        };
+
+        db.distinctTematica = [];
+        db.distinctRecomandat = [];
+
+        $.each(detaliiFilme, function (index, movie) {
+            if (movie.Tematica != "") {
+                var x = $.grep(db.distinctTematica, function (e) { return e.Name == movie.Tematica; });
+                if (x.length == 0) {
+                    db.distinctTematica.push({ Name: movie.Tematica, Id: movie.Tematica });
+                }
+
+                x = $.grep(db.distinctRecomandat, function (e) { return e.Name == movie.Recomandat.replace("?", ""); });
+                if (x.length == 0 && movie.Recomandat != "" && movie.Recomandat != "?") {
+                    db.distinctRecomandat.push(
+                        {
+                            Name: movie.Recomandat.replace("?", ""),
+                            Id: movie.Recomandat.replace("?", "")
+                        });
+                }
+            }
+        });
+
+        db.distinctTematica.sort(function (a, b) {
+            var a1 = a.Name,
+                b1 = b.Name;
+
+            if (a1 == b1) return 0;
+            return a1 > b1 ? 1 : -1;
+        });
+
+        db.distinctRecomandat.sort(function (a, b) {
+            var a1 = parseInt(a.Name.replace(/\W/g, "")),
+                b1 = parseInt(b.Name.replace(/\W/g, ""));
+
+            if (a1 == b1) return 0;
+            return a1 > b1 ? 1 : -1;
+        });
+
+        db.distinctRecomandat.splice(0, 0,
+            {
+                Name: "?",
+                Id: "?"
+            });
+
+        db.distinctRecomandat.splice(0, 0,
+            {
+                Name: "Any",
+                Id: ""
+            });
+
+        db.calitate =
+            [
+                { Name: "All", Id: "" },
+                { Name: "FullHD", Id: 0 },
+                { Name: "HD", Id: 1 },
+                { Name: "SD", Id: 2 },
+                //{Name: "HD_up", Id: 3}, //la seriale
+                //{Name: "Mix", Id: 4} //la seriale, SD cu HD
+            ];
+
+        //https://github.com/tabalinas/jsgrid/issues/60
+        //https://stackoverflow.com/questions/35887675/empty-option-when-filtering
+
+        $("#jsGrid").jsGrid({
+            height: $("#sections-wrapper").height(),
+            width: "100%",
+
+            controller: db,
+            autoload: true,
+            filtering: true,
+            sorting: true,
+
+            paging: true,
+            pagerContainer: "#pager-wrapper",
+            pagerFormat: "Page {pageIndex} of {pageCount} ({itemsCount} items) {first} {prev} {pages} {next} {last} &nbsp;&nbsp;  ",
+            pageButtonCount: 5,
+            pageSize: 20,
+            pagePrevText: "<",
+            pageNextText: ">",
+            pageFirstText: "<<",
+            pageLastText: ">>",
+
+            fields: [
+
+                {
+                    name: "Titlu", title: "Title", type: "text", width: 150,
+                    itemTemplate: function (value, item) {
+
+                        var link = item.MoreInfo != null ? item.MoreInfo : "www.imdb.com";
+                        var tooltip = item.Obs != "" ? "title=\"" + item.Obs + "\"" : "";
+
+                        return item.MoreInfo != "" || item.Obs != ""
+                            ? $("<div>").html(
+                                "<div style=\"display: table; width: 100%\">" +
+                                    "<div style=\"display: table-row;\">" +
+                                        "<div style=\"display: table-cell;\">" + value +
+                                        "</div>" +
+                                        "<div style=\"display: table-cell; width: 25px; vertical-align: middle;\">" +
+                                            "<a href=\"" + link + "\" target=\"_blank\" " + tooltip + ">" +
+                                                "<img src=\"Images\\info.png\" style=\"display: block; margin: 0 auto; opacity: 0.5;\" alt=\"i\">" +
+                                            "</a>" +
+                                        "</div>" +
+                                    "</div>" +
+                                "</div>")
+                            : value;
+                    },
+
+
+                },
+                { name: "An", title: "Year", type: "text", width: 50, align: "center" },
+                {
+                    name: "Recomandat", title: "Recommended", type: "select", width: 50, items: db.distinctRecomandat, valueField: "Id", textField: "Name",
+                    itemTemplate: function (value, item) {
+                        return item.RecomandatLink != ""
+                            ? $("<a>").attr("href", item.RecomandatLink).attr("target", "_blank").text(value)
+                            : value;
+                    },
+                },
+                {
+                    name: "DurataStr", title: "Length", type: "text", width: 50, align: "center",
+                    itemTemplate: function (value) {
+                        return value == "00:00:00" ? "?" : value;
+                    },
+                    //filtering: false
+                },
+                {
+                    name: "Calitate", title: "Quality", type: "select", width: 50, align: "center", items: db.calitate, valueField: "Id", textField: "Name",
+                    /* 					itemTemplate: function(value, item) {
+                                            if (value == 2) {
+                                                var toolTip = "Resolution: " + (item.Rezolutie == "" ? "?" : item.Rezolutie) + "\nFile format: " + (item.Format == "" ? "?" : item.Format);
+                                                return $("<label>").attr("title", toolTip).attr("style", "cursor: help").text(getByValue(db.calitate, "Id", value, "Name"));
+                                            }
+                                            else						//(arr, propId, value, propReturn) {
+                                                return getByValue(db.calitate, "Id", value, "Name");
+                                        },  */
+                },
+                {
+                    name: "Audio", type: "text", width: 50, align: "center",
+                    itemTemplate: function (value, item) {
+                        var nlSource;
+
+                        if (item.NLSource == "" && item.Audio.toLowerCase().indexOf("nl") > -1)
+                            nlSource = "not specified!";
+                        else
+                            if (item.NLSource != "" && item.Audio.toLowerCase().indexOf("nl") == -1)
+                                nlSource = "wrong data!";
+                            else {
+                                switch (item.NLSource) {
+                                    case "*":
+                                        nlSource = "BDRip/Bluray";
+                                        break;
+
+                                    case "**":
+                                        nlSource = "DVD";
+                                        break;
+
+                                    case "***":
+                                        nlSource = "DivX";
+                                        break;
+
+                                    default:
+                                        nlSource = "unknown or multiple (" + item.NLSource + ")"
+                                        break;
+                                }
+                            }
+
+                        var tooltip = "Nl source: " + nlSource; //+"<br>"
+                        return $("<label>").attr("title", tooltip).attr("style", "cursor: help").text(value);
+                    },
+                },
+                { name: "Subtitrari", title: "Subtitles", type: "text", width: 50, align: "center" },
+                {
+                    name: "Tematica", title: "Theme", type: "select", width: 50, align: "center", items: db.distinctTematica, valueField: "Id", textField: "Name",
+                    filterTemplate: function () {
+                        var $select = jsGrid.fields.select.prototype.filterTemplate.call(this);
+                        $select.prepend($("<option>").prop("value", "").text("All").attr("selected", "selected"));
+                        return $select;
+                    }
+                },
+                {
+                    name: "Dimensiune", title: "Size", type: "text", width: 50, align: "right",
+                    //filtering: false,
+                    itemTemplate: function (value, item) {
+                        return $("<label>").attr("title", "Bitrate: " + item.Bitrate).attr("style", "cursor: help").text(value);
+                    },
+                },
+            ],
+
+            onInit: function () {
+                //placing the pager in an external element leaves the grid with a gap
+                setTimeout(function () {
+                    $("#jsGrid").height($("#sections-wrapper").height() - $(".jsgrid-pager-container").height() - 1); //-1 = top-border
+
+                    $(".jsgrid-filter-row").find(".jsgrid-cell:nth-child(4)").find("input").attr("disabled", true);
+                    $(".jsgrid-filter-row").find(".jsgrid-cell:nth-child(9)").find("input").attr("disabled", true);
+                }, 0);
+            },
+            onRefreshed: function () {
+                $(".jsgrid-pager").contents().filter(function () {
+                    return this.nodeType == 3;
+                }).each(function () {
+                    this.textContent = this.textContent.replace('{itemsCount}', $("#jsGrid").jsGrid("_itemsCount"));
+                });
+
+                $("#jsGrid").height($("#sections-wrapper").height() - $(".jsgrid-pager-container").height() - 1); //-1 = top-border
+            }
+        });
+
+        CloseSideNav();
+        $(".about-message-img").css("display", "none");
+    }
 
     $(".sidenav span").on("click", function () {
         switch ($(this).data("categ")) {
@@ -168,6 +452,8 @@ $(document).ready(function () {
             case 14:
             case 15:
             case 16:
+                SoftCloseSearch();
+
                 $("#snapshotStat").html(detaliiListaF);
                 $("#moviesSections span").removeClass("selected-subSection");
                 $(this).addClass("selected-subSection");
@@ -179,260 +465,17 @@ $(document).ready(function () {
                 break;
 
             case 17:
+                SoftCloseSearch();
+
                 $("#moviesSections span").removeClass("selected-subSection");
                 $(this).addClass("selected-subSection");
 
-                var sectionHtml =
-                    "<div id=\"jsGrid\"></div>" +
-                    "<div id=\"jsGridPager\">" +
-                    "<div style=\"display:table-row;\">" +
-                    "<div id=\"pager-wrapper\">" +
-                    "</div>" +
-                    "<div id=\"pager-customOptions\">" +
-                    "<div style=\"display: inline-block;\">" +
-                    "Page size:" +
-                    "</div>" +
-                    "<div style=\"display: inline-block; padding-left: 5px;\">" +
-                    "<select id=\"gridPageCount\" onchange=\"setPageCount()\">" +
-                    "<option value=\"10\">10</option>" +
-                    "<option value=\"20\" selected=\"selected\">20</option>" +
-                    "<option value=\"50\">50</option>" +
-                    "<option value=\"100\">100</option>" +
-                    "</select>" +
-                    "</div>" +
-                    "</div>	" +
-                    "</div>" +
-                    "</div>";
-
-                $("#sections-wrapper").html(sectionHtml);
-
-                var db = {
-                    loadData: function (filter) {
-                        return $.grep(detaliiFilme, function (el) {
-                            return (!filter.Titlu || el.Titlu.toLowerCase().indexOf(filter.Titlu.toLowerCase()) > -1)
-                                && (!filter.An || el.An == filter.An)
-                                && (!filter.Recomandat || el.Recomandat.indexOf(filter.Recomandat) > -1)
-                                && (!filter.Audio || el.Audio.toLowerCase().indexOf(filter.Audio.toLowerCase()) > -1)
-                                && (!filter.Subtitrari || el.Subtitrari.toLowerCase().indexOf(filter.Subtitrari.toLowerCase()) > -1)
-                                && (!filter.Tematica || el.Tematica.indexOf(filter.Tematica) > -1)
-                                && (!filter.Calitate || el.Calitate == filter.Calitate);
-                        });
-                    }
-                };
-
-                db.distinctTematica = [];
-                db.distinctRecomandat = [];
-
-                $.each(detaliiFilme, function (index, movie) {
-                    if (movie.Tematica != "") {
-                        var x = $.grep(db.distinctTematica, function (e) { return e.Name == movie.Tematica; });
-                        if (x.length == 0) {
-                            db.distinctTematica.push({ Name: movie.Tematica, Id: movie.Tematica });
-                        }
-
-                        x = $.grep(db.distinctRecomandat, function (e) { return e.Name == movie.Recomandat.replace("?", ""); });
-                        if (x.length == 0 && movie.Recomandat != "" && movie.Recomandat != "?") {
-                            db.distinctRecomandat.push(
-                                {
-                                    Name: movie.Recomandat.replace("?", ""),
-                                    Id: movie.Recomandat.replace("?", "")
-                                });
-                        }
-                    }
-                });
-
-                db.distinctTematica.sort(function (a, b) {
-                    var a1 = a.Name,
-                        b1 = b.Name;
-
-                    if (a1 == b1) return 0;
-                    return a1 > b1 ? 1 : -1;
-                });
-
-                db.distinctRecomandat.sort(function (a, b) {
-                    var a1 = parseInt(a.Name.replace(/\W/g, "")),
-                        b1 = parseInt(b.Name.replace(/\W/g, ""));
-
-                    if (a1 == b1) return 0;
-                    return a1 > b1 ? 1 : -1;
-                });
-
-                db.distinctRecomandat.splice(0, 0,
-                    {
-                        Name: "?",
-                        Id: "?"
-                    });
-
-                db.distinctRecomandat.splice(0, 0,
-                    {
-                        Name: "Any",
-                        Id: ""
-                    });
-
-                db.calitate =
-                    [
-                        { Name: "All", Id: "" },
-                        { Name: "FullHD", Id: 0 },
-                        { Name: "HD", Id: 1 },
-                        { Name: "SD", Id: 2 },
-                        //{Name: "HD_up", Id: 3}, //la seriale
-                        //{Name: "Mix", Id: 4} //la seriale, SD cu HD
-                    ];
-
-                //https://github.com/tabalinas/jsgrid/issues/60
-                //https://stackoverflow.com/questions/35887675/empty-option-when-filtering
-
-                $("#jsGrid").jsGrid({
-                    height: $("#sections-wrapper").height(),
-                    width: "100%",
-
-                    controller: db,
-                    autoload: true,
-                    filtering: true,
-                    sorting: true,
-
-                    paging: true,
-                    pagerContainer: "#pager-wrapper",
-                    pagerFormat: "Page {pageIndex} of {pageCount} ({itemsCount} items) {first} {prev} {pages} {next} {last} &nbsp;&nbsp;  ",
-                    pageButtonCount: 5,
-                    pageSize: 20,
-                    pagePrevText: "<",
-                    pageNextText: ">",
-                    pageFirstText: "<<",
-                    pageLastText: ">>",
-
-                    fields: [
-
-                        {
-                            name: "Titlu", title: "Title", type: "text", width: 150,
-                            itemTemplate: function (value, item) {
-
-                                var link = item.MoreInfo != null ? item.MoreInfo : "www.imdb.com";
-                                var tooltip = item.Obs != "" ? "title=\"" + item.Obs + "\"" : "";
-
-                                return item.MoreInfo != "" || item.Obs != ""
-                                    ? $("<div>").html(
-                                        "<div style=\"display: table; width: 100%\">" +
-                                        "<div style=\"display: table-row;\">" +
-                                        "<div style=\"display: table-cell;\">" + value +
-                                        "</div>" +
-                                        "<div style=\"display: table-cell; width: 25px; vertical-align: middle;\">" +
-                                        "<a href=\"" + link + "\" target=\"_blank\" " + tooltip + ">" +
-                                        "<img src=\"Images\\info.png\" style=\"display: block; margin: 0 auto; opacity: 0.5;\" alt=\"i\">" +
-                                        "</a>" +
-                                        "</div>" +
-                                        "</div>" +
-                                        "</div>")
-                                    : value;
-                            },
-
-
-                        },
-                        { name: "An", title: "Year", type: "text", width: 50, align: "center" },
-                        {
-                            name: "Recomandat", title: "Recommended", type: "select", width: 50, items: db.distinctRecomandat, valueField: "Id", textField: "Name",
-                            itemTemplate: function (value, item) {
-                                return item.RecomandatLink != ""
-                                    ? $("<a>").attr("href", item.RecomandatLink).attr("target", "_blank").text(value)
-                                    : value;
-                            },
-                        },
-                        {
-                            name: "DurataStr", title: "Length", type: "text", width: 50, align: "center",
-                            itemTemplate: function (value) {
-                                return value == "00:00:00" ? "?" : value;
-                            },
-                            //filtering: false
-                        },
-                        {
-                            name: "Calitate", title: "Quality", type: "select", width: 50, align: "center", items: db.calitate, valueField: "Id", textField: "Name",
-                            /* 					itemTemplate: function(value, item) {
-                                                    if (value == 2) {
-                                                        var toolTip = "Resolution: " + (item.Rezolutie == "" ? "?" : item.Rezolutie) + "\nFile format: " + (item.Format == "" ? "?" : item.Format);
-                                                        return $("<label>").attr("title", toolTip).attr("style", "cursor: help").text(getByValue(db.calitate, "Id", value, "Name"));
-                                                    }
-                                                    else						//(arr, propId, value, propReturn) {
-                                                        return getByValue(db.calitate, "Id", value, "Name");
-                                                },  */
-                        },
-                        {
-                            name: "Audio", type: "text", width: 50, align: "center",
-                            itemTemplate: function (value, item) {
-                                var nlSource;
-
-                                if (item.NLSource == "" && item.Audio.toLowerCase().indexOf("nl") > -1)
-                                    nlSource = "not specified!";
-                                else
-                                    if (item.NLSource != "" && item.Audio.toLowerCase().indexOf("nl") == -1)
-                                        nlSource = "wrong data!";
-                                    else {
-                                        switch (item.NLSource) {
-                                            case "*":
-                                                nlSource = "BDRip/Bluray";
-                                                break;
-
-                                            case "**":
-                                                nlSource = "DVD";
-                                                break;
-
-                                            case "***":
-                                                nlSource = "DivX";
-                                                break;
-
-                                            default:
-                                                nlSource = "unknown or multiple (" + item.NLSource + ")"
-                                                break;
-                                        }
-                                    }
-
-                                var tooltip = "Nl source: " + nlSource; //+"<br>"
-                                return $("<label>").attr("title", tooltip).attr("style", "cursor: help").text(value);
-                            },
-                        },
-                        { name: "Subtitrari", title: "Subtitles", type: "text", width: 50, align: "center" },
-                        {
-                            name: "Tematica", title: "Theme", type: "select", width: 50, align: "center", items: db.distinctTematica, valueField: "Id", textField: "Name",
-                            filterTemplate: function () {
-                                var $select = jsGrid.fields.select.prototype.filterTemplate.call(this);
-                                $select.prepend($("<option>").prop("value", "").text("All").attr("selected", "selected"));
-                                return $select;
-                            }
-                        },
-                        {
-                            name: "Dimensiune", title: "Size", type: "text", width: 50, align: "right",
-                            //filtering: false,
-                            itemTemplate: function (value, item) {
-                                return $("<label>").attr("title", "Bitrate: " + item.Bitrate).attr("style", "cursor: help").text(value);
-                            },
-                        },
-                    ],
-
-                    onInit: function () {
-                        //placing the pager in an external element leaves the grid with a gap
-                        setTimeout(function () {
-                            $("#jsGrid").height($("#sections-wrapper").height() - $(".jsgrid-pager-container").height() - 1); //-1 = top-border
-
-                            $(".jsgrid-filter-row").find(".jsgrid-cell:nth-child(4)").find("input").attr("disabled", true);
-                            $(".jsgrid-filter-row").find(".jsgrid-cell:nth-child(9)").find("input").attr("disabled", true);
-                        }, 0);
-                    },
-                    onRefreshed: function () {
-                        $(".jsgrid-pager").contents().filter(function () {
-                            return this.nodeType == 3;
-                        }).each(function () {
-                            this.textContent = this.textContent.replace('{itemsCount}', $("#jsGrid").jsGrid("_itemsCount"));
-                        });
-
-                        $("#jsGrid").height($("#sections-wrapper").height() - $(".jsgrid-pager-container").height() - 1); //-1 = top-border
-                    }
-                });
-
-                CloseSideNav();
-                $(".about-message-img").css("display", "none");
-
+                buildMoviesGridSection();
                 break;
 
             case 2: //TV Series
+                SoftCloseSearch();
+
                 $("#snapshotStat").html(detaliiListaS);
                 $(this).addClass("selected-subSection");
 
@@ -489,7 +532,7 @@ $(document).ready(function () {
                     sectionHtml +=
                             "<tr class=\"seriesLine noselect lineWithDetails" + alternateRowClass + "\">" +
                                 "<td class=\"markerCol\">" +
-                                    "<img class=\"markerSymbol serialExpander collapsed\" data-serialId=\"" + serial.Id + "\" alt=\">\">" +
+                                    "<div class=\"markerSymbol serialExpander collapsed\" data-serialId=\"" + serial.Id + "\" alt=\">\"></div>" +
                                 "</td>" +
                                 "<td>" +
                                     serial.Titlu +
@@ -557,8 +600,8 @@ $(document).ready(function () {
                                                             "<table class=\"tableWrapper\">" +
                                                                 "<tr class=\"seasonLine noselect lineWithDetails\">" +
                                                                     "<td class=\"markerCol\">" +
-                                                                        "<span class=\"markerSymbol sezonExpander " + (sezonNo == 1 ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\">" +
-                                                                        "</span>" +
+                                                                        "<div class=\"markerSymbol sezonExpander " + (sezonNo == 1 ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\">" +
+                                                                        "</div>" +
                                                                     "</td>" +
                                                                     "<td colspan='6'>" +
                                                                         "Season " + episod.Sezon +
@@ -632,8 +675,10 @@ $(document).ready(function () {
                 break;
 
             case 4: //Collections
+                SoftCloseSearch();
+
                 $(".about-message-img").css("display", "none");
-                $("#sections-wrapper").html("<div style=\"font-size: 72px; padding-top: 150px;\" title=\"No data available ... yet!\">ðŸ˜”</div>");
+                $("#sections-wrapper").html("<div style=\"font-size: 72px; padding-top: 150px; width: 100px; margin: 0 auto;\" title=\"No data available ... yet!\">😔</div>");
                 $("#snapshotStat").html("Nothing to see here ... :(");
 
                 $("#moviesSections span").removeClass("selected-subSection");
@@ -715,9 +760,19 @@ $(window).resize(function () {
     }, 100, "contentWrapper");
 });
 
-
+function SoftCloseSearch() {
+    if ($("#searchCtrl").hasClass("focus")) {
+        // if (searchResultTimer != null) {
+        //     clearInterval(searchResultTimer);
+        // }
+        $("#searchCtrl").removeClass("focus");
+        $("#searchCtrl").val("");
+    }
+}
 
 function DisplayHome() {
+    SoftCloseSearch();
+
     $("#sections-wrapper").html($("#homeWarning").html());
     $("#moviesSections span").removeClass("selected-subSection");
     $(".about-message-img").css("display", "");

@@ -337,16 +337,18 @@ html, body {
 }
 
 .markerSymbol {
-    font-size: 80%;
     cursor: pointer;
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
 }
 
     .markerSymbol.collapsed {
-        content: url("../Images/arrowRight12.png");
+        background-image: url("../Images/arrowRight12.png");
     }
 
     .markerSymbol.expanded {
-        content: url("../Images/arrowDown12.png");
+        background-image: url("../Images/arrowDown12.png");
     }
 
 
