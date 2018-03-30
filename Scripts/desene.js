@@ -33,8 +33,8 @@ $(document).ready(function () {
             {
                 var firstLetters = $(prevSelectedMoviesSection).data("titlestartwith").split(",");
                 var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
-    
-                buildMoviesSection(moviesInSection);               
+
+                buildMoviesSection(moviesInSection);
             }
             else
             {
@@ -104,7 +104,7 @@ $(document).ready(function () {
     });
 
 
-	var buildMoviesSection = function(moviesInSection) {       
+	var buildMoviesSection = function(moviesInSection) {
 		var sectionHtml =
 			"<div class=\"container\">" +
 			    "<div class=\"cards\">";
@@ -174,7 +174,7 @@ $(document).ready(function () {
 		CloseSideNav();
 		$(".about-message-img").css("display", "none");
     }
-    
+
     var buildMoviesGridSection = function() {
         var sectionHtml =
             "<div id=\"jsGrid\"></div>" +
