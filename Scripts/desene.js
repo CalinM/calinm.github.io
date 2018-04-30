@@ -109,7 +109,7 @@ $(document).ready(function () {
 			"<div class=\"container\">" +
 			    "<div class=\"cards\">";
 
-		var mobileClass = isMobile() ? "cardM" : "";
+		var mobileClass = "";//= isMobile() ? "cardM" : "";
 		moviesInSection.forEach(function (el) {
 			sectionHtml +=
                     "<div class=\"card " + mobileClass + "\">" +
@@ -587,20 +587,23 @@ $(document).ready(function () {
                                                         "<td style=\"vertical-align: top;\">";
 
                     var sezonNo = 0;
+					var firstSeason = true;
 
                     episoadeSerial.forEach(function (episod) {
                         if (episod.Sezon > sezonNo) {
                             if (sezonNo > 0) {
+								firstSeason = false;
+
                                 sectionHtml +=
                                                             "</table>";
                             }
-                            sezonNo++;
+                            sezonNo = episod.Sezon;
 
                             sectionHtml +=
                                                             "<table class=\"tableWrapper\">" +
                                                                 "<tr class=\"seasonLine noselect lineWithDetails\">" +
                                                                     "<td class=\"markerCol\">" +
-                                                                        "<div class=\"markerSymbol sezonExpander " + (sezonNo == 1 ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\">" +
+                                                                        "<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\">" +
                                                                         "</div>" +
                                                                     "</td>" +
                                                                     "<td colspan='6'>" +
@@ -610,7 +613,7 @@ $(document).ready(function () {
                         }
 
                         sectionHtml +=
-                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\" style=\"" + (sezonNo == 1 ? "display: table-row;" : "display: none;") + "\">" +
+                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
                                                                     "<td style=\"width: 30px;\">" +
                                                                     "</td>" +
                                                                     "<td>" +
