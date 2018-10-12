@@ -7,7 +7,7 @@ $(document).ready(function () {
         $(".sideNav-overlay").css("display", "block");
 
         if ($("#sections-wrapper").find(".aboutPage-warning-title").length == 0) {
-            $("#sections-wrapper").addClass("sideNav-overlay-content-transform")
+            $("#sections-wrapper").addClass("sideNav-overlay-content-transform");
         }
     });
 
@@ -19,7 +19,7 @@ $(document).ready(function () {
 		$(s).attr("updated", "false");
 
 		var searchedString = $(s).val().toLowerCase();
-		var titlesMatchingSearchCriteria = $.grep(detaliiFilme, function (el) { return el.Titlu.toLowerCase().indexOf(searchedString) >= 0; });
+		var titlesMatchingSearchCriteria = $.grep(detaliiFilme, function (el) { return el.FN.toLowerCase().indexOf(searchedString) >= 0; });
 		buildMoviesSection(titlesMatchingSearchCriteria);
 	}
 
@@ -32,7 +32,7 @@ $(document).ready(function () {
             if ($(prevSelectedMoviesSection).data("titlestartwith") != null)
             {
                 var firstLetters = $(prevSelectedMoviesSection).data("titlestartwith").split(",");
-                var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
+                var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.FN.charAt(0)) >= 0; });
 
                 buildMoviesSection(moviesInSection);
             }
@@ -118,9 +118,9 @@ $(document).ready(function () {
                                 //the movieId is also placed on the Poster to be visible in the lazy loading process
 
                                 (
-                                    el.TrailerVideoId == null || el.TrailerVideoId == ""
+                                    el.Tr == null || el.Tr == ""
                                         ? "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\">"
-                                        : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + el.TrailerVideoId + "'>" +
+                                        : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + el.Tr + "'>" +
                                         "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover withTrailer lazy\" alt=\"Loading poster ...\">" +
                                         "</a>"
                                 ) +
@@ -128,14 +128,14 @@ $(document).ready(function () {
                             "</div>" +
                             "<div class=\"movie-detail\">" +
                                 (
-                                    el.Recomandat != ""
-                                        ? "<a class='recommended' title='Recomandat: " + el.Recomandat + "&#013Click for details ...' href='" + el.RecomandatLink + "' target='_blank'>" + el.Recomandat.replace("+", "") + "</a>"
+                                    el.R != ""
+                                        ? "<a class='recommended' title='Recomandat: " + el.R + "&#013Click for details ...' href='" + el.RL + "' target='_blank'>" + el.R.replace("+", "") + "</a>"
                                         : "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
                                     ) +
 
-                                    "<a class='recommended info' title='Tematica: " + (el.Tematica == "" ? "-" : el.Tematica) + "&#013An: " + el.An + "&#013Durata: " + (el.DurataStr == "" || el.DurataStr == "00:00:00" ? "?" : el.DurataStr) + "&#013Click for details ...' href='" + el.MoreInfo + "' target='_blank'>i</a>" +
-                                    "<div class='quality' title='Dimensiune: " + el.Dimensiune + "&#013Bitrate: " + el.Bitrate + "'>" + (el.Calitate == 0 ? "FHD" : el.Calitate == 1 ? "HD" : "SD") + "</div>" +
-                                    "<div class='audio' title='Subtitrari: " + el.Subtitrari + "&#013SursaNl: " + el.NLSource + "'>" + el.Audio + "</div>" +
+                                    "<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "&#013An: " + el.Y + "&#013Durata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "&#013Click for details ...' href='" + el.DL + "' target='_blank'>i</a>" +
+                                    "<div class='quality' title='Dimensiune: " + el.S + "&#013Bitrate: " + el.B + "'>" + (el.Q == 0 ? "FHD" : el.Q == 1 ? "HD" : "SD") + "</div>" +
+                                    "<div class='audio' title='Subtitrari: " + el.SU + "&#013SursaNl: " + el.Nl + "'>" + el.A + "</div>" +
                             "</div>" +
                         "</div>" +
                     "</div>";
@@ -160,7 +160,7 @@ $(document).ready(function () {
 					var movieWithoutPoster = $.grep(detaliiFilme, function (el) { return el.Id == movieId });
 					movieCard.find(".movieTitle-posterNotFound:first").text(movieWithoutPoster.length != 1
 						? "Error retrieving movie title!"
-						: movieWithoutPoster[0].Titlu);
+						: movieWithoutPoster[0].FN);
 				},
 			});
 
@@ -203,13 +203,13 @@ $(document).ready(function () {
         var db = {
             loadData: function (filter) {
                 return $.grep(detaliiFilme, function (el) {
-                    return (!filter.Titlu || el.Titlu.toLowerCase().indexOf(filter.Titlu.toLowerCase()) > -1)
-                        && (!filter.An || el.An == filter.An)
-                        && (!filter.Recomandat || el.Recomandat.indexOf(filter.Recomandat) > -1)
-                        && (!filter.Audio || el.Audio.toLowerCase().indexOf(filter.Audio.toLowerCase()) > -1)
-                        && (!filter.Subtitrari || el.Subtitrari.toLowerCase().indexOf(filter.Subtitrari.toLowerCase()) > -1)
-                        && (!filter.Tematica || el.Tematica.indexOf(filter.Tematica) > -1)
-                        && (!filter.Calitate || el.Calitate == filter.Calitate);
+                    return (!filter.FN || el.FN.toLowerCase().indexOf(filter.FN.toLowerCase()) > -1)
+                        && (!filter.Y || el.Y == filter.Y)
+                        && (!filter.R || el.R.indexOf(filter.R) > -1)
+                        && (!filter.A || el.A.toLowerCase().indexOf(filter.A.toLowerCase()) > -1)
+                        && (!filter.SU || el.SU.toLowerCase().indexOf(filter.SU.toLowerCase()) > -1)
+                        && (!filter.T || el.T.indexOf(filter.T) > -1)
+                        && (!filter.Q || el.Q == filter.Q);
                 });
             }
         };
@@ -218,18 +218,18 @@ $(document).ready(function () {
         db.distinctRecomandat = [];
 
         $.each(detaliiFilme, function (index, movie) {
-            if (movie.Tematica != "") {
-                var x = $.grep(db.distinctTematica, function (e) { return e.Name == movie.Tematica; });
+            if (movie.T != "") {
+                var x = $.grep(db.distinctTematica, function (e) { return e.Name == movie.T; });
                 if (x.length == 0) {
-                    db.distinctTematica.push({ Name: movie.Tematica, Id: movie.Tematica });
+                    db.distinctTematica.push({ Name: movie.T, Id: movie.T });
                 }
 
-                x = $.grep(db.distinctRecomandat, function (e) { return e.Name == movie.Recomandat.replace("?", ""); });
-                if (x.length == 0 && movie.Recomandat != "" && movie.Recomandat != "?") {
+                x = $.grep(db.distinctRecomandat, function (e) { return e.Name == movie.R.replace("?", ""); });
+                if (x.length == 0 && movie.R != "" && movie.R != "?") {
                     db.distinctRecomandat.push(
                         {
-                            Name: movie.Recomandat.replace("?", ""),
-                            Id: movie.Recomandat.replace("?", "")
+                            Name: movie.R.replace("?", ""),
+                            Id: movie.R.replace("?", "")
                         });
                 }
             }
@@ -301,10 +301,10 @@ $(document).ready(function () {
                     name: "Titlu", title: "Title", type: "text", width: 150,
                     itemTemplate: function (value, item) {
 
-                        var link = item.MoreInfo != null ? item.MoreInfo : "www.imdb.com";
-                        var tooltip = item.Obs != "" ? "title=\"" + item.Obs + "\"" : "";
+                        var link = item.DL != null ? item.DL : "www.imdb.com";
+                        var tooltip = item.N != "" ? "title=\"" + item.N + "\"" : "";
 
-                        return item.MoreInfo != "" || item.Obs != ""
+                        return item.DL != "" || item.N != ""
                             ? $("<div>").html(
                                 "<div style=\"display: table; width: 100%\">" +
                                     "<div style=\"display: table-row;\">" +
@@ -326,8 +326,8 @@ $(document).ready(function () {
                 {
                     name: "Recomandat", title: "Recommended", type: "select", width: 50, items: db.distinctRecomandat, valueField: "Id", textField: "Name",
                     itemTemplate: function (value, item) {
-                        return item.RecomandatLink != ""
-                            ? $("<a>").attr("href", item.RecomandatLink).attr("target", "_blank").text(value)
+                        return item.RL != ""
+                            ? $("<a>").attr("href", item.RL).attr("target", "_blank").text(value)
                             : value;
                     },
                 },
@@ -354,13 +354,13 @@ $(document).ready(function () {
                     itemTemplate: function (value, item) {
                         var nlSource;
 
-                        if (item.NLSource == "" && item.Audio.toLowerCase().indexOf("nl") > -1)
+                        if (item.Nl == "" && item.A.toLowerCase().indexOf("nl") > -1)
                             nlSource = "not specified!";
                         else
-                            if (item.NLSource != "" && item.Audio.toLowerCase().indexOf("nl") == -1)
+                            if (item.Nl != "" && item.A.toLowerCase().indexOf("nl") == -1)
                                 nlSource = "wrong data!";
                             else {
-                                switch (item.NLSource) {
+                                switch (item.Nl) {
                                     case "*":
                                         nlSource = "BDRip/Bluray";
                                         break;
@@ -374,7 +374,7 @@ $(document).ready(function () {
                                         break;
 
                                     default:
-                                        nlSource = "unknown or multiple (" + item.NLSource + ")"
+                                        nlSource = "unknown or multiple (" + item.Nl + ")"
                                         break;
                                 }
                             }
@@ -396,7 +396,7 @@ $(document).ready(function () {
                     name: "Dimensiune", title: "Size", type: "text", width: 50, align: "right",
                     //filtering: false,
                     itemTemplate: function (value, item) {
-                        return $("<label>").attr("title", "Bitrate: " + item.Bitrate).attr("style", "cursor: help").text(value);
+                        return $("<label>").attr("title", "Bitrate: " + item.B).attr("style", "cursor: help").text(value);
                     },
                 },
             ],
@@ -459,7 +459,7 @@ $(document).ready(function () {
                 $(this).addClass("selected-subSection");
 
 				var firstLetters = $(this).data("titlestartwith").split(",");
-				var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.Titlu.charAt(0)) >= 0; });
+				var moviesInSection = $.grep(detaliiFilme, function (el) { return firstLetters.indexOf(el.FN.charAt(0)) >= 0; });
 
 				buildMoviesSection(moviesInSection);
                 break;
@@ -518,8 +518,8 @@ $(document).ready(function () {
                 detaliiSeriale.forEach(function (serial) {
                     serialIndex++;
 
-                    var link = serial.MoreInfo != null ? serial.MoreInfo : "www.imdb.com";
-                    var tooltip = serial.Obs != "" ? serial.Obs + "&#013" : "";
+                    var link = serial.DL != null ? serial.DL : "www.imdb.com";
+                    var tooltip = serial.N != "" ? serial.N + "&#013" : "";
                     tooltip += "Click for details ...";
 
                     var episoadeSerial = $.grep(detaliiEpisoade, function (el) { return el.SerialId == serial.Id; });
@@ -535,7 +535,7 @@ $(document).ready(function () {
                                     "<div class=\"markerSymbol serialExpander collapsed\" data-serialId=\"" + serial.Id + "\" alt=\">\"></div>" +
                                 "</td>" +
                                 "<td>" +
-                                    serial.Titlu +
+                                    serial.FN +
                                 "</td>" +
                                 "<td>" +
                                     "<a href=\"" + link + "\" target=\"_blank\" title=\"" + tooltip + "\">" +
@@ -543,21 +543,21 @@ $(document).ready(function () {
                                     "</a>" +
                                 "</td>" +
                                 "<td class=\"detailCell w100\">" +
-                                    (serial.Recomandat != ""
-                                        ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.Recomandat + "&#013Click for details ...' href='" + serial.RecomandatLink + "' target='_blank'>" + serial.Recomandat.replace("+", "") + "</a>"
+                                    (serial.R != ""
+                                        ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.R + "&#013Click for details ...' href='" + serial.RL + "' target='_blank'>" + serial.R.replace("+", "") + "</a>"
                                         : "<div class='recommended' style='float: unset; margin: 0px;' title='Recomandare necunoscuta'>?</div>") +
                                 "</td>" +
                                 "<td class=\"detailCell w80\">" +
-                                    CalitateIndexToStr(serial.Calitate) +
+                                    CalitateIndexToStr(serial.Q) +
                                 "</td>" +
                                 "<td class=\"detailCell w100\">" +
                                     serial.DimensiuneInt + " GB" +
                                 "</td>" +
                                 "<td class=\"detailCell w100\" " + differentAudioStyle + ">" +
-                                    serial.Audio +
+                                    serial.A +
                                 "</td>" +
                                 "<td class=\"detailCell w125\">" +
-                                    serial.An +
+                                    serial.Y +
                                 "</td>" +
                                 "<td class=\"detailCell w125\">" +
                                     episoadeSerial.length +
@@ -576,9 +576,9 @@ $(document).ready(function () {
                                                         "<td style=\"width:250px; vertical-align: top;\">" +
 
                                                         (
-                                                            serial.TrailerVideoId == null || serial.TrailerVideoId == ""
+                                                            serial.Tr == null || serial.Tr == ""
                                                                 ? "<img src=\"Imgs/Seriale/poster-" + serial.Id + ".jpg\" data-movieId=\"" + serial.Id + "\">"
-                                                                : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + serial.TrailerVideoId + "'>" +
+                                                                : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + serial.Tr + "'>" +
                                                                     "<img src=\"Imgs/Seriale/poster-" + serial.Id + ".jpg\" data-movieId=\"" + serial.Id + "\">" +
                                                                   "</a>"
                                                         ) +
@@ -617,22 +617,22 @@ $(document).ready(function () {
                                                                     "<td style=\"width: 30px;\">" +
                                                                     "</td>" +
                                                                     "<td>" +
-                                                                        episod.Titlu +
+                                                                        episod.FN +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w80\">" +
-                                                                        CalitateIndexToStr(serial.Calitate) +
+                                                                        CalitateIndexToStr(serial.Q) +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w100\">" +
-                                                                        episod.Dimensiune +
+                                                                        episod.S +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w100\">" +
-                                                                        episod.Audio +
+                                                                        episod.A +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w125\">" +
-                                                                        episod.An +
+                                                                        episod.Y +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w123\">" +
-                                                                        episod.Tematica +
+                                                                        episod.T +
                                                                     "</td>" +
                                                                 "</tr>";
                     });
