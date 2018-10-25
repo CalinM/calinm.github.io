@@ -216,7 +216,7 @@ $(document).ready(function () {
 
         db.distinctTematica = [];
         db.distinctRecomandat = [];
-
+		
         $.each(detaliiFilme, function (index, movie) {
             if (movie.T != "") {
                 var x = $.grep(db.distinctTematica, function (e) { return e.Name == movie.T; });
@@ -231,7 +231,7 @@ $(document).ready(function () {
                             Name: movie.R.replace("?", ""),
                             Id: movie.R.replace("?", "")
                         });
-                }
+                }			
             }
         });
 
@@ -263,16 +263,19 @@ $(document).ready(function () {
                 Id: ""
             });
 
+			
         db.calitate =
             [
                 { Name: "All", Id: "" },
-                { Name: "FullHD", Id: 0 },
-                { Name: "HD", Id: 1 },
-                { Name: "SD", Id: 2 },
+                { Name: "FullHD", Id: "FullHD" }, //Id: 0
+                { Name: "HD", Id: "HD" }, //Id: 1
+                { Name: "SD", Id: "SD" },	//Id: 2
                 //{Name: "HD_up", Id: 3}, //la seriale
                 //{Name: "Mix", Id: 4} //la seriale, SD cu HD
             ];
-
+			
+			
+			
         //https://github.com/tabalinas/jsgrid/issues/60
         //https://stackoverflow.com/questions/35887675/empty-option-when-filtering
 
@@ -298,11 +301,17 @@ $(document).ready(function () {
             fields: [
 
                 {
-                    name: "Titlu", title: "Title", type: "text", width: 150,
+                    name: "FN", title: "Title", type: "text", width: 150,
                     itemTemplate: function (value, item) {
 
                         var link = item.DL != null ? item.DL : "www.imdb.com";
-                        var tooltip = item.N != "" ? "title=\"" + item.N + "\"" : "";
+                        //var tooltip = item.N != "" ? "title=\"" + item.N + "\"" : "";
+						var tooltip = "Click for detailed movie info ...";
+						if (item.N != "") {
+							tooltip += "\n\nMovie notes:\n" + item.N;
+						}
+						
+						tooltip = "title=\"" + tooltip + "\"";
 
                         return item.DL != "" || item.N != ""
                             ? $("<div>").html(
@@ -322,9 +331,9 @@ $(document).ready(function () {
 
 
                 },
-                { name: "An", title: "Year", type: "text", width: 50, align: "center" },
+                { name: "Y", title: "Year", type: "text", width: 50, align: "center" },
                 {
-                    name: "Recomandat", title: "Recommended", type: "select", width: 50, items: db.distinctRecomandat, valueField: "Id", textField: "Name",
+                    name: "R", title: "Recommended", type: "select", width: 50, items: db.distinctRecomandat, valueField: "Id", textField: "Name",
                     itemTemplate: function (value, item) {
                         return item.RL != ""
                             ? $("<a>").attr("href", item.RL).attr("target", "_blank").text(value)
@@ -332,14 +341,14 @@ $(document).ready(function () {
                     },
                 },
                 {
-                    name: "DurataStr", title: "Length", type: "text", width: 50, align: "center",
+                    name: "L", title: "Length", type: "text", width: 50, align: "center",
                     itemTemplate: function (value) {
                         return value == "00:00:00" ? "?" : value;
                     },
                     //filtering: false
                 },
                 {
-                    name: "Calitate", title: "Quality", type: "select", width: 50, align: "center", items: db.calitate, valueField: "Id", textField: "Name",
+                    name: "Q", title: "Quality", type: "select", width: 50, align: "center", items: db.calitate, valueField: "Id", textField: "Name",
                     /* 					itemTemplate: function(value, item) {
                                             if (value == 2) {
                                                 var toolTip = "Resolution: " + (item.Rezolutie == "" ? "?" : item.Rezolutie) + "\nFile format: " + (item.Format == "" ? "?" : item.Format);
@@ -350,7 +359,7 @@ $(document).ready(function () {
                                         },  */
                 },
                 {
-                    name: "Audio", type: "text", width: 50, align: "center",
+                    name: "A", type: "text", width: 50, align: "center",
                     itemTemplate: function (value, item) {
                         var nlSource;
 
@@ -383,9 +392,9 @@ $(document).ready(function () {
                         return $("<label>").attr("title", tooltip).attr("style", "cursor: help").text(value);
                     },
                 },
-                { name: "Subtitrari", title: "Subtitles", type: "text", width: 50, align: "center" },
+                { name: "SU", title: "Subtitles", type: "text", width: 50, align: "center" },
                 {
-                    name: "Tematica", title: "Theme", type: "select", width: 50, align: "center", items: db.distinctTematica, valueField: "Id", textField: "Name",
+                    name: "T", title: "Theme", type: "select", width: 50, align: "center", items: db.distinctTematica, valueField: "Id", textField: "Name",
                     filterTemplate: function () {
                         var $select = jsGrid.fields.select.prototype.filterTemplate.call(this);
                         $select.prepend($("<option>").prop("value", "").text("All").attr("selected", "selected"));
@@ -393,7 +402,7 @@ $(document).ready(function () {
                     }
                 },
                 {
-                    name: "Dimensiune", title: "Size", type: "text", width: 50, align: "right",
+                    name: "S", title: "Size", type: "text", width: 50, align: "right",
                     //filtering: false,
                     itemTemplate: function (value, item) {
                         return $("<label>").attr("title", "Bitrate: " + item.B).attr("style", "cursor: help").text(value);
