@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     DisplayHome();
     ResizeMoviesSection();
 
@@ -629,7 +629,7 @@ $(document).ready(function () {
                                                                         episod.FN +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w80\">" +
-                                                                        serial.Q +
+                                                                        episod.Q +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w100\">" +
                                                                         episod.S +
