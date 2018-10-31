@@ -119,9 +119,9 @@ $(document).ready(function () {
 
                                 (
                                     el.Tr == null || el.Tr == ""
-                                        ? "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\">"
+                                        ? "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\" title=\"" + el.FN + "\">"
                                         : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + el.Tr + "'>" +
-                                        "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover withTrailer lazy\" alt=\"Loading poster ...\">" +
+                                        "<img data-src=\"Imgs/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover withTrailer lazy\" alt=\"Loading poster ...\" title=\"" + el.FN + "\">" +
                                         "</a>"
                                 ) +
 
@@ -134,7 +134,7 @@ $(document).ready(function () {
                                     ) +
 
                                     "<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "&#013An: " + el.Y + "&#013Durata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "&#013Click for details ...' href='" + el.DL + "' target='_blank'>i</a>" +
-                                    "<div class='quality' title='Dimensiune: " + el.S + "&#013Bitrate: " + el.B + "'>" + (el.Q == 0 ? "FHD" : el.Q == 1 ? "HD" : "SD") + "</div>" +
+                                    "<div class='quality' title='Dimensiune: " + el.S + "&#013Bitrate: " + el.B + "'>" + (el.Q == "" ? "SD?" : el.Q) + "</div>" +
                                     "<div class='audio' title='Subtitrari: " + el.SU + "&#013SursaNl: " + el.Nl + "'>" + el.A + "</div>" +
                             "</div>" +
                         "</div>" +
@@ -216,7 +216,7 @@ $(document).ready(function () {
 
         db.distinctTematica = [];
         db.distinctRecomandat = [];
-		
+
         $.each(detaliiFilme, function (index, movie) {
             if (movie.T != "") {
                 var x = $.grep(db.distinctTematica, function (e) { return e.Name == movie.T; });
@@ -231,7 +231,7 @@ $(document).ready(function () {
                             Name: movie.R.replace("?", ""),
                             Id: movie.R.replace("?", "")
                         });
-                }			
+                }
             }
         });
 
@@ -263,7 +263,7 @@ $(document).ready(function () {
                 Id: ""
             });
 
-			
+
         db.calitate =
             [
                 { Name: "All", Id: "" },
@@ -273,9 +273,9 @@ $(document).ready(function () {
                 //{Name: "HD_up", Id: 3}, //la seriale
                 //{Name: "Mix", Id: 4} //la seriale, SD cu HD
             ];
-			
-			
-			
+
+
+
         //https://github.com/tabalinas/jsgrid/issues/60
         //https://stackoverflow.com/questions/35887675/empty-option-when-filtering
 
@@ -310,7 +310,7 @@ $(document).ready(function () {
 						if (item.N != "") {
 							tooltip += "\n\nMovie notes:\n" + item.N;
 						}
-						
+
 						tooltip = "title=\"" + tooltip + "\"";
 
                         return item.DL != "" || item.N != ""
@@ -531,7 +531,7 @@ $(document).ready(function () {
                     var tooltip = serial.N != "" ? serial.N + "&#013" : "";
                     tooltip += "Click for details ...";
 
-                    var episoadeSerial = $.grep(detaliiEpisoade, function (el) { return el.SerialId == serial.Id; });
+                    var episoadeSerial = $.grep(detaliiEpisoade, function (el) { return el.SId == serial.Id; });
                     var alternateRowClass = serialIndex % 2 == 0 ? " alternateRow" : "";
 
                     var differentAudioStyle = serial.DifferentAudio
@@ -557,10 +557,10 @@ $(document).ready(function () {
                                         : "<div class='recommended' style='float: unset; margin: 0px;' title='Recomandare necunoscuta'>?</div>") +
                                 "</td>" +
                                 "<td class=\"detailCell w80\">" +
-                                    CalitateIndexToStr(serial.Q) +
+                                    serial.Q +
                                 "</td>" +
                                 "<td class=\"detailCell w100\">" +
-                                    serial.DimensiuneInt + " GB" +
+                                    serial.S + " GB" +
                                 "</td>" +
                                 "<td class=\"detailCell w100\" " + differentAudioStyle + ">" +
                                     serial.A +
@@ -569,7 +569,7 @@ $(document).ready(function () {
                                     serial.Y +
                                 "</td>" +
                                 "<td class=\"detailCell w125\">" +
-                                    episoadeSerial.length +
+                                    serial.Ec +
                                 "</td>" +
                             "</tr>" +
 
@@ -599,37 +599,37 @@ $(document).ready(function () {
 					var firstSeason = true;
 
                     episoadeSerial.forEach(function (episod) {
-                        if (episod.Sezon > sezonNo) {
+                        if (episod.SZ > sezonNo) {
                             if (sezonNo > 0) {
 								firstSeason = false;
 
                                 sectionHtml +=
                                                             "</table>";
                             }
-                            sezonNo = episod.Sezon;
+                            sezonNo = episod.SZ;
 
                             sectionHtml +=
                                                             "<table class=\"tableWrapper\">" +
                                                                 "<tr class=\"seasonLine noselect lineWithDetails\">" +
                                                                     "<td class=\"markerCol\">" +
-                                                                        "<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\">" +
+                                                                        "<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\">" +
                                                                         "</div>" +
                                                                     "</td>" +
                                                                     "<td colspan='6'>" +
-                                                                        "Season " + episod.Sezon +
+                                                                        "Season " + episod.SZ +
                                                                     "</td>" +
                                                                 "</tr>";
                         }
 
                         sectionHtml +=
-                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.Sezon + "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
+                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
                                                                     "<td style=\"width: 30px;\">" +
                                                                     "</td>" +
                                                                     "<td>" +
                                                                         episod.FN +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w80\">" +
-                                                                        CalitateIndexToStr(serial.Q) +
+                                                                        serial.Q +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w100\">" +
                                                                         episod.S +
@@ -690,7 +690,7 @@ $(document).ready(function () {
                 SoftCloseSearch();
 
                 $(".about-message-img").css("display", "none");
-                $("#sections-wrapper").html("<div style=\"font-size: 72px; padding-top: 150px; width: 100px; margin: 0 auto;\" title=\"No data available ... yet!\">😔</div>");
+                $("#sections-wrapper").html("<div style=\"font-size: 72px; padding-top: 150px; width: 100px; margin: 0 auto;\" title=\"No data available ... yet!\">ðŸ˜”</div>");
                 $("#snapshotStat").html("Nothing to see here ... :(");
 
                 $("#moviesSections span").removeClass("selected-subSection");
@@ -822,18 +822,6 @@ function ResizeMoviesSection() {
     if ($(".detailsTableWrapper").length > 0) {
         $(".detailsTableWrapper").height(h - $("#seriesHeaderTable").height());
     }
-}
-
-function CalitateIndexToStr(c) {
-    switch (c) {
-        case -1: return "NotSet";
-        case 0: return "FullHD";
-        case 1: return "HD";
-        case 2: return "SD";
-        case 3: return "HD_up";
-        case 4: return "Mix";
-    }
-
 }
 
 function isMobile() {
