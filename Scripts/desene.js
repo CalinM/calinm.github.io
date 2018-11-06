@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     DisplayHome();
     ResizeMoviesSection();
 
@@ -129,11 +129,11 @@
                             "<div class=\"movie-detail\">" +
                                 (
                                     el.R != ""
-                                        ? "<a class='recommended' title='Recomandat: " + el.R + "&#013Click for details ...' href='" + el.RL + "' target='_blank'>" + el.R.replace("+", "") + "</a>"
+                                        ? "<a class='recommended' title='Recomandat: " + el.R + "&#013Click for details ...&#013(external link!)' href='" + el.RL + "' target='_blank'>" + el.R.replace("+", "") + "</a>"
                                         : "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
                                     ) +
 
-                                    "<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "&#013An: " + el.Y + "&#013Durata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "&#013Click for details ...' href='" + el.DL + "' target='_blank'>i</a>" +
+                                    "<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "&#013An: " + el.Y + "&#013Durata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "&#013Click for details ...&#013(external link!)' href='" + el.DL + "' target='_blank'>i</a>" +
                                     "<div class='quality' title='Dimensiune: " + el.S + "&#013Bitrate: " + el.B + "'>" + (el.Q == "" ? "SD?" : el.Q) + "</div>" +
                                     "<div class='audio' title='Subtitrari: " + el.SU + "&#013SursaNl: " + el.Nl + "'>" + el.A + "</div>" +
                             "</div>" +
@@ -306,7 +306,7 @@
 
                         var link = item.DL != null ? item.DL : "www.imdb.com";
                         //var tooltip = item.N != "" ? "title=\"" + item.N + "\"" : "";
-						var tooltip = "Click for detailed movie info ...";
+						var tooltip = "Click for detailed movie info ...&#013(external link!)";
 						if (item.N != "") {
 							tooltip += "\n\nMovie notes:\n" + item.N;
 						}
@@ -529,7 +529,7 @@
 
                     var link = serial.DL != null ? serial.DL : "www.imdb.com";
                     var tooltip = serial.N != "" ? serial.N + "&#013" : "";
-                    tooltip += "Click for details ...";
+                    tooltip += "Click for details ...&#013(external link!)";
 
                     var episoadeSerial = $.grep(detaliiEpisoade, function (el) { return el.SId == serial.Id; });
                     var alternateRowClass = serialIndex % 2 == 0 ? " alternateRow" : "";
@@ -546,14 +546,14 @@
                                 "<td>" +
                                     serial.FN +
                                 "</td>" +
-                                "<td>" +
+                                "<td class=\"detailCell w25\">" +
                                     "<a href=\"" + link + "\" target=\"_blank\" title=\"" + tooltip + "\">" +
-                                        "<img src=\"Images\\info.png\" style=\"display: block; margin: 0 auto; opacity: 0.5;\" alt=\"i\">" +
+                                        "<img src=\"Images\\info.png\" class=\"infoSign\" alt=\"i\">" +
                                     "</a>" +
                                 "</td>" +
                                 "<td class=\"detailCell w100\">" +
                                     (serial.R != ""
-                                        ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.R + "&#013Click for details ...' href='" + serial.RL + "' target='_blank'>" + serial.R.replace("+", "") + "</a>"
+                                        ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.R + "&#013Click for details ...&#013(external link!)' href='" + serial.RL + "' target='_blank'>" + serial.R.replace("+", "") + "</a>"
                                         : "<div class='recommended' style='float: unset; margin: 0px;' title='Recomandare necunoscuta'>?</div>") +
                                 "</td>" +
                                 "<td class=\"detailCell w80\">" +
@@ -622,11 +622,19 @@
                         }
 
                         sectionHtml +=
-                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
+                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\" data-episodeId=\"" + episod.Id + "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
                                                                     "<td style=\"width: 30px;\">" +
                                                                     "</td>" +
                                                                     "<td>" +
                                                                         episod.FN +
+                                                                    "</td>" +
+																	"<td class=\"detailCell w25\">" +
+                                                                        (episod.Th == 0
+																			? ""
+																			: "<img src=\"Images\\thumbnail.png\" class=\"infoSign movieStillDisplay\" style=\"cursor: pointer;\" title=\"Click to expand/collapse the thumbnails section for this file.&#013Press CTRL while clicking to expand/collapse all sections in the current season.\" alt=\"^\">"
+																		) +
+																	"</td>" +
+																	"<td class=\"detailCell w100\">" +
                                                                     "</td>" +
                                                                     "<td class=\"detailCell w80\">" +
                                                                         episod.Q +
@@ -644,6 +652,29 @@
                                                                         episod.T +
                                                                     "</td>" +
                                                                 "</tr>";
+
+						if (episod.Th == 1) {
+							sectionHtml +=
+								"<tr id=\"th-" + episod.Id + "\" class=\"thRow\" style=\"display: none;\">" + //data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\"
+									"<td style=\"width: 30px;\">" +
+									"</td>" +
+									"<td colspan=\"8\">" +
+										"<table>" +
+											"<tr>" +
+												"<td class=\"thumbnailStillCell\">" +
+													"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episod.Id + "-0.jpg\" alt=\"?\">" +
+												"</td>" +
+												"<td class=\"thumbnailStillCell\">" +
+													"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episod.Id + "-1.jpg\" alt=\"?\">" +
+												"</td>" +
+												"<td class=\"thumbnailStillCell\">" +
+													"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episod.Id + "-2.jpg\" alt=\"?\">" +
+												"</td>" +
+											"</tr>" +
+										"</table>" +
+									"</td>" +
+								"</tr>";
+						}
                     });
 
                     sectionHtml +=
@@ -722,6 +753,28 @@ function RebindSeriesEvents() {
 
     $(".seasonLine.lineWithDetails").on("click", function (e) {
         ToggleExpandSezon($(this).find(".markerSymbol"));
+    });
+
+    $(".movieStillDisplay").on("click", function (evt) {
+		evt.stopPropagation();
+
+		var episodeId = $(this).closest("tr").data("episodeid");
+		var thumbnailRow = $("#th-" + episodeId);
+
+
+		if (evt.ctrlKey) {
+			var b = ($(thumbnailRow).css("display") == "none");
+			$(this).closest("table").find(".thRow").each(function(el) {
+				$(this).css("display", b ? "table-row" : "none");
+			})
+		}
+		else {
+
+			if ($(thumbnailRow).css("display") == "none")
+				$(thumbnailRow).css("display", "table-row");
+			else
+				$(thumbnailRow).css("display", "none");
+		}
     });
 }
 

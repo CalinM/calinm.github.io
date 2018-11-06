@@ -389,6 +389,10 @@ html, body {
         width: 123px;
     }
 
+    .detailCell.w25 {
+        width: 25px;
+    }
+
 .seasonLine:hover {
     background-color: #c4e2ff;
 }
@@ -430,4 +434,20 @@ html, body {
 
 .lineWithDetails {
     cursor: pointer;
+}
+
+.infoSign {
+    display: block;
+    margin: 0 auto;
+    opacity: 0.5;
+}
+
+    .infoSign:hover {
+        opacity: 1;
+    }
+
+.thumbnailStillCell {
+    width: 444px;
+    background: black;
+    text-align: center;
 }
