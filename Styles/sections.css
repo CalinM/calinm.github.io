@@ -446,8 +446,19 @@ html, body {
         opacity: 1;
     }
 
+
+
+.thumbnails-wrapper {
+    table-layout: fixed;
+    width: 100%;
+}
+
 .thumbnailStillCell {
-    width: 444px;
+    width: 33%;
     background: black;
     text-align: center;
+}
+
+.thumbnailStillCell img {
+    max-height: 235px;
 }

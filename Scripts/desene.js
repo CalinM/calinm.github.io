@@ -576,115 +576,7 @@ $(document).ready(function () {
                             "<tr class=\"detailSerieLine " + alternateRowClass + "\" data-serialId=\"" + serial.Id + "\" style=\"display: none;\">" +
                                 "<td style=\"width: 30px;\">" +
                                 "</td>" +
-                                "<td colspan=\"8\">" +
-                                    "<table class=\"tableWrapper\">" +
-                                        "<tr>" +
-                                            "<td>" +
-                                                "<table class=\"tableWrapper\">" +
-                                                    "<tr>" +
-                                                        "<td style=\"width:250px; vertical-align: top;\">" +
-
-                                                        (
-                                                            serial.Tr == null || serial.Tr == ""
-                                                                ? "<img src=\"Imgs/Seriale/poster-" + serial.Id + ".jpg\" data-movieId=\"" + serial.Id + "\">"
-                                                                : "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + serial.Tr + "'>" +
-                                                                    "<img src=\"Imgs/Seriale/poster-" + serial.Id + ".jpg\" data-movieId=\"" + serial.Id + "\">" +
-                                                                  "</a>"
-                                                        ) +
-
-                                                        "</td>" +
-                                                        "<td style=\"vertical-align: top;\">";
-
-                    var sezonNo = 0;
-					var firstSeason = true;
-
-                    episoadeSerial.forEach(function (episod) {
-                        if (episod.SZ > sezonNo) {
-                            if (sezonNo > 0) {
-								firstSeason = false;
-
-                                sectionHtml +=
-                                                            "</table>";
-                            }
-                            sezonNo = episod.SZ;
-
-                            sectionHtml +=
-                                                            "<table class=\"tableWrapper\">" +
-                                                                "<tr class=\"seasonLine noselect lineWithDetails\">" +
-                                                                    "<td class=\"markerCol\">" +
-                                                                        "<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\">" +
-                                                                        "</div>" +
-                                                                    "</td>" +
-                                                                    "<td colspan='6'>" +
-                                                                        "Season " + episod.SZ +
-                                                                    "</td>" +
-                                                                "</tr>";
-                        }
-
-                        sectionHtml +=
-                                                                "<tr class=\"episoadeLine\" data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\" data-episodeId=\"" + episod.Id + "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
-                                                                    "<td style=\"width: 30px;\">" +
-                                                                    "</td>" +
-                                                                    "<td>" +
-                                                                        episod.FN +
-                                                                    "</td>" +
-																	"<td class=\"detailCell w25\">" +
-                                                                        (episod.Th == 0
-																			? ""
-																			: "<img src=\"Images\\thumbnail.png\" class=\"infoSign movieStillDisplay\" style=\"cursor: pointer;\" title=\"Click to expand/collapse the thumbnails section for this file.&#013Press CTRL while clicking to expand/collapse all sections in the current season.\" alt=\"^\">"
-																		) +
-																	"</td>" +
-																	"<td class=\"detailCell w100\">" +
-                                                                    "</td>" +
-                                                                    "<td class=\"detailCell w80\">" +
-                                                                        episod.Q +
-                                                                    "</td>" +
-                                                                    "<td class=\"detailCell w100\">" +
-                                                                        episod.S +
-                                                                    "</td>" +
-                                                                    "<td class=\"detailCell w100\">" +
-                                                                        episod.A +
-                                                                    "</td>" +
-                                                                    "<td class=\"detailCell w125\">" +
-                                                                        episod.Y +
-                                                                    "</td>" +
-                                                                    "<td class=\"detailCell w123\">" +
-                                                                        episod.T +
-                                                                    "</td>" +
-                                                                "</tr>";
-
-						if (episod.Th == 1) {
-							sectionHtml +=
-								"<tr id=\"th-" + episod.Id + "\" class=\"thRow\" style=\"display: none;\">" + //data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\"
-									"<td style=\"width: 30px;\">" +
-									"</td>" +
-									"<td colspan=\"8\">" +
-										"<table>" +
-											"<tr>" +
-												"<td class=\"thumbnailStillCell\">" +
-													"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episod.Id + "-0.jpg\" alt=\"?\">" +
-												"</td>" +
-												"<td class=\"thumbnailStillCell\">" +
-													"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episod.Id + "-1.jpg\" alt=\"?\">" +
-												"</td>" +
-												"<td class=\"thumbnailStillCell\">" +
-													"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episod.Id + "-2.jpg\" alt=\"?\">" +
-												"</td>" +
-											"</tr>" +
-										"</table>" +
-									"</td>" +
-								"</tr>";
-						}
-                    });
-
-                    sectionHtml +=
-                                                            "</table>" +
-                                                        "</td>" +
-                                                    "</tr>" +
-                                                "</table>" +
-                                            "</td>" +
-                                        "</tr>" +
-                                    "</table>" +
+                                "<td id=\"detailSerie-inner"+ serial.Id + "\" colspan=\"8\">" +
                                 "</td>" +
                             "</tr>";
 
@@ -736,26 +628,26 @@ $(document).ready(function () {
 });
 
 function RebindSeriesEvents() {
-    $(".serialExpander").on("click", function (evt) {
+    $(".serialExpander").off("click").on("click", function (evt) {
         evt.stopPropagation();
         ToggleExpandSeries($(this));
     });
 
-    $(".sezonExpander").on("click", function (evt) {
+    $(".sezonExpander").off("click").on("click", function (evt) {
         evt.stopPropagation();
         ToggleExpandSezon($(this));
     });
 
 
-    $(".seriesLine.lineWithDetails").on("click", function (e) {
+    $(".seriesLine.lineWithDetails").off("click").on("click", function (e) {
         ToggleExpandSeries($(this).find(".markerSymbol"));
     });
 
-    $(".seasonLine.lineWithDetails").on("click", function (e) {
+    $(".seasonLine.lineWithDetails").off("click").on("click", function (e) {
         ToggleExpandSezon($(this).find(".markerSymbol"));
     });
 
-    $(".movieStillDisplay").on("click", function (evt) {
+    $(".movieStillDisplay").off("click").on("click", function (evt) {
 		evt.stopPropagation();
 
 		var episodeId = $(this).closest("tr").data("episodeid");
@@ -779,8 +671,167 @@ function RebindSeriesEvents() {
 }
 
 function ToggleExpandSeries(s) {
-    var detailsRow = $(".detailSerieLine[data-serialId='" + $(s).data("serialid") + "']");
-    ToggleDetailVisibility(detailsRow, s);
+	var seriesId = $(s).data("serialid");
+	
+	var toggleExpand = function() {
+		var detailsRow = $(".detailSerieLine[data-serialId='" + seriesId + "']");
+		ToggleDetailVisibility(detailsRow, s);	
+	}
+	
+	var seriesDetailsEl = $("#detailSerie-inner" + seriesId);
+	if (seriesDetailsEl.text() == '')
+	{
+		var seasons = 
+			$.unique(
+				$.grep(detaliiEpisoade,
+					function (el) {
+						return el.SId == seriesId;
+					})
+				 .map(function (el) {
+					return el.SZ;
+					})
+				);
+		
+		var serialDetails = $.grep(detaliiSeriale, function(el) { return el.Id == seriesId});
+		
+		if (seasons.length == 0 || serialDetails.length == 0)
+		{
+			console.warn("invalid data");
+			return;	
+		}
+		
+		var serial = serialDetails[0];
+		
+		var seriesDetailsHtml =
+			"<table class=\"tableWrapper\">" +
+				"<tr>" +
+					"<td style=\"width:250px; vertical-align: top;\">" +
+
+					(
+						serial.Tr == null || serial.Tr == ""
+							? "<img src=\"Imgs/Seriale/poster-" + serial.Id + ".jpg\" data-movieId=\"" + serial.Id + "\">"
+							: "<a class='movieTrailerLink' href='https://www.youtube.com/watch?v=" + serial.Tr + "'>" +
+								"<img src=\"Imgs/Seriale/poster-" + serial.Id + ".jpg\" data-movieId=\"" + serial.Id + "\">" +
+							  "</a>"
+					) +
+
+					"</td>" +
+					"<td style=\"vertical-align: top;\">";
+								
+		var firstSeason = true;
+		var hasSpecial = false;
+
+		var addSeason = function(seasonNo)
+		{
+			var seasonSection =
+						"<table class=\"tableWrapper\">" +
+							"<tr class=\"seasonLine noselect lineWithDetails\">" +
+								"<td class=\"markerCol\">" +
+									"<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + seriesId + "\" data-sezon=\"" + seasonNo + "\">" +
+									"</div>" +
+								"</td>" +
+								"<td colspan='6'>" +
+									(seasonNo == -2 ? "Specials" : "Season " + seasonNo) +
+								"</td>" +
+							"</tr>";
+
+			var episodesInSeason = $.grep(detaliiEpisoade, function (el) { return el.SId == seriesId && el.SZ == seasonNo; });
+			
+			episodesInSeason.forEach(function (episode) {
+				seasonSection +=
+							"<tr class=\"episoadeLine\" data-serialId=\"" + seriesId + "\" data-sezon=\"" + seasonNo + "\" data-episodeId=\"" + episode.Id + 
+								"\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
+								
+								"<td style=\"width: 30px;\">" +
+								"</td>" +
+								"<td>" +
+									episode.FN +
+								"</td>" +
+								"<td class=\"detailCell w25\">" +
+									(episode.Th == 0
+										? ""
+										: "<img src=\"Images\\thumbnail.png\" class=\"infoSign movieStillDisplay\" style=\"cursor: pointer;\" title=\"Click to expand/collapse the thumbnails section for this file.&#013Press CTRL while clicking to expand/collapse all sections in the current season.\" alt=\"^\">"
+									) +
+								"</td>" +
+								"<td class=\"detailCell w100\">" +
+								"</td>" +
+								"<td class=\"detailCell w80\">" +
+									episode.Q +
+								"</td>" +
+								"<td class=\"detailCell w100\">" +
+									episode.S +
+								"</td>" +
+								"<td class=\"detailCell w100\">" +
+									episode.A +
+								"</td>" +
+								"<td class=\"detailCell w125\">" +
+									episode.Y +
+								"</td>" +
+								"<td class=\"detailCell w123\">" +
+									episode.T +
+								"</td>" +
+							"</tr>";
+
+				if (episode.Th == 1) {
+					seasonSection +=
+							"<tr id=\"th-" + episode.Id + "\" class=\"thRow\" style=\"display: none;\">" + //data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\"
+								"<td style=\"width: 30px;\">" +
+								"</td>" +
+								"<td colspan=\"8\">" +
+									"<table class=\"thumbnails-wrapper\">" +
+										"<tr>" +
+											"<td class=\"thumbnailStillCell\">" +
+												"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episode.Id + "-0.jpg\" alt=\"?\">" +
+											"</td>" +
+											"<td class=\"thumbnailStillCell\">" +
+												"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episode.Id + "-1.jpg\" alt=\"?\">" +
+											"</td>" +
+											"<td class=\"thumbnailStillCell\">" +
+												"<img src=\"Imgs\\Seriale\\Thumbnails\\thumb-" + episode.Id + "-2.jpg\" alt=\"?\">" +
+											"</td>" +
+										"</tr>" +
+									"</table>" +
+								"</td>" +
+							"</tr>";
+				}				
+			});
+			
+			seasonSection +=
+						"</table>";
+				
+			return seasonSection;
+		}
+		
+		seasons.forEach(function (seasonNo) {
+			if (seasonNo == -2)
+			{
+				hasSpecial = true;
+				return;
+			}
+			
+			seriesDetailsHtml += addSeason(seasonNo);
+			firstSeason = false;
+		});
+		
+
+		if (hasSpecial) {
+			seriesDetailsHtml += addSeason(-2);
+		}
+		
+		seriesDetailsHtml +=
+					"</td>" +
+				"</tr>" +
+			"</table>";
+
+		seriesDetailsEl.html(seriesDetailsHtml);
+		RebindSeriesEvents();
+	
+		toggleExpand();
+	}
+	else
+		toggleExpand();
+	
+
 };
 
 function ToggleExpandSezon(s) {
