@@ -904,7 +904,11 @@ function DisplayHome() {
                 $(this).parent().find("li").removeClass("active");
                 $(this).addClass("active");
 
+<<<<<<< HEAD
                 if ($("#newInnerWrapper").height() < 1) //can be 0.5 on different zoom levels
+=======
+                if ($("#newInnerWrapper").height() == 0)
+>>>>>>> origin/master
                     $("#newInnerWrapper").height(280);
 
                 var sectionRenderer = function (sectionIds, isSeries) {
@@ -957,10 +961,17 @@ function DisplayHome() {
                                         items: 2
                                     },
                                     600: {
+<<<<<<< HEAD
                                         items: 3
                                     },
                                     1000: {
                                         items: 6
+=======
+                                        items: 5
+                                    },
+                                    1000: {
+                                        items: 8
+>>>>>>> origin/master
                                     }
                                 }
                             });
