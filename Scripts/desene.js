@@ -961,6 +961,9 @@ function DisplayHome() {
                                     },
                                     1000: {
                                         items: 6
+                                    },
+                                    2000: {
+                                        items: 8
                                     }
                                 }
                             });
