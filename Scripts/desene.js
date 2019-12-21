@@ -1,3 +1,6 @@
+var currentSeriesTypeViewDataM;
+var currentSeriesTypeViewDataD;
+
 $(document).ready(function () {
     DisplayHome();
     ResizeMoviesSection();
@@ -487,126 +490,19 @@ $(document).ready(function () {
                 SoftCloseSearch();
 
                 $("#snapshotStat").html(detaliiListaS);
-                $(this).addClass("selected-subSection");
+                currentSeriesTypeViewDataM = detaliiSeriale;
+                currentSeriesTypeViewDataD = detaliiEpisoade;
+                RenderSeriesTypeView();
 
-                var sectionHtml =
-                    "<table id=\"seriesHeaderTable\" class=\"tableWrapper\">" +
-                    "<tr class=\"headerRow\">" +
-                    "<td style=\"width: 30px;\">" +
-                    "</td>" +
-                    "<td>" +
-                    "Series name</br>/ Episode title" +
-                    "</td>" +
-                    "<td class=\"markerCol\">" +
-                    "</td>" +
-                    "<td class=\"detailCell w100\">" +
-                    "Recommended" +
-                    "</td>" +
-                    "<td class=\"detailCell w80\">" +
-                    "Quality" +
-                    "</td>" +
-                    "<td class=\"detailCell w100\">" +
-                    "Size" +
-                    "</td>" +
-                    "<td class=\"detailCell w100\">" +
-                    "Audio" +
-                    "</td>" +
-                    "<td class=\"detailCell w125\">" +
-                    "Year" +
-                    "</td>" +
-                    "<td class=\"detailCell w125\">" +
-                    "No. of episodes / Theme" +
-                    "</td>" +
-                    "</tr>" +
-                    "</table>" +
+                break;
 
-                    "<div class=\"detailsTableWrapper\">" +
-                    "<table id=\"seriesMainTable\" class=\"tableWrapper\">";
+            case 3: //Recordings
+                SoftCloseSearch();
 
-                var serialIndex = 0;
-
-                detaliiSeriale.forEach(function (serial) {
-                    serialIndex++;
-
-                    var link = serial.DL != null ? serial.DL : "www.imdb.com";
-                    var tooltip = serial.N != "" ? serial.N + "\n" : "";
-                    tooltip += "Click for details ... (external link!)";
-
-                    var episoadeSerial = $.grep(detaliiEpisoade, function (el) { return el.SId == serial.Id; });
-                    var alternateRowClass = serialIndex % 2 == 0 ? " alternateRow" : "";
-
-                    var differentAudioStyle = serial.DifferentAudio
-                        ? "style=\"color: red; cursor: help;\" title=\"Exista episoade cu diferente in track-urile audio (ex. nu sunt dublate Ro)\""
-                        : "";
-
-                    sectionHtml +=
-                        "<tr class=\"seriesLine noselect lineWithDetails" + alternateRowClass + "\">" +
-                        "<td class=\"markerCol\">" +
-                        "<div class=\"markerSymbol serialExpander collapsed\" data-serialId=\"" + serial.Id + "\" alt=\">\"></div>" +
-                        "</td>" +
-                        "<td>" +
-                        serial.FN +
-                        "</td>" +
-                        "<td class=\"detailCell w25\">" +
-                        "<a href=\"" + link + "\" target=\"_blank\" title=\"" + tooltip + "\">" +
-                        "<img src=\"Images\\info.png\" class=\"infoSign\" alt=\"i\">" +
-                        "</a>" +
-                        "</td>" +
-                        "<td class=\"detailCell w100\">" +
-                        (serial.R != ""
-                            ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.R + "\nClick for details ... (external link!)' href='" + serial.RL + "' target='_blank'>" + serial.R.replace("+", "") + "</a>"
-                            : "<div class='recommended' style='float: unset; margin: 0px;' title='Recomandare necunoscuta'>?</div>") +
-                        "</td>" +
-                        "<td class=\"detailCell w80\">" +
-                        serial.Q +
-                        "</td>" +
-                        "<td class=\"detailCell w100\">" +
-                        serial.S + " GB" +
-                        "</td>" +
-                        "<td class=\"detailCell w100\" " + differentAudioStyle + ">" +
-                        serial.A +
-                        "</td>" +
-                        "<td class=\"detailCell w125\">" +
-                        serial.Y +
-                        "</td>" +
-                        "<td class=\"detailCell w125\">" +
-                        serial.Ec +
-                        "</td>" +
-                        "</tr>" +
-
-                        "<tr class=\"detailSerieLine " + alternateRowClass + "\" data-serialId=\"" + serial.Id + "\" style=\"display: none;\">" +
-                        "<td style=\"width: 30px;\">" +
-                        "</td>" +
-                        "<td id=\"detailSerie-inner" + serial.Id + "\" colspan=\"8\">" +
-                        "</td>" +
-                        "</tr>";
-
-                });
-
-                sectionHtml +=
-                    "</table>" +
-                    "</div>";
-
-                $(".about-message-img").css("display", "none");
-                $("#sections-wrapper").html(sectionHtml);
-
-                setTimeout(function () {
-                    RebindSeriesEvents();
-
-                    var h = window.innerHeight - $(".master-toolbar").outerHeight() - $("footer").height() - $("#seriesHeaderTable").height();
-                    $(".detailsTableWrapper").height(h);
-
-                    $(".detailsTableWrapper").slimScroll({
-                        height: h
-                    });
-                    $("#sections-wrapper").slimScroll({
-                        height: $("#sections-wrapper").height()
-                    });
-
-                    $(".movieTrailerLink").YouTubePopUp();
-                }, 100);
-
-                CloseSideNav();
+                $("#snapshotStat").html(detaliiListaR);
+                currentSeriesTypeViewDataM = detaliiRecordings;
+                currentSeriesTypeViewDataD = detaliiEpisoadeRecordings;
+                RenderSeriesTypeView();
 
                 break;
 
@@ -627,6 +523,130 @@ $(document).ready(function () {
         }
     });
 });
+
+
+function RenderSeriesTypeView() {
+    $(this).addClass("selected-subSection");
+
+    var sectionHtml =
+        "<table id=\"seriesHeaderTable\" class=\"tableWrapper\">" +
+        "<tr class=\"headerRow\">" +
+        "<td style=\"width: 30px;\">" +
+        "</td>" +
+        "<td>" +
+        "Series name</br>/ Episode title" +
+        "</td>" +
+        "<td class=\"markerCol\">" +
+        "</td>" +
+        "<td class=\"detailCell w100\">" +
+        "Recommended" +
+        "</td>" +
+        "<td class=\"detailCell w80\">" +
+        "Quality" +
+        "</td>" +
+        "<td class=\"detailCell w100\">" +
+        "Size" +
+        "</td>" +
+        "<td class=\"detailCell w100\">" +
+        "Audio" +
+        "</td>" +
+        "<td class=\"detailCell w125\">" +
+        "Year" +
+        "</td>" +
+        "<td class=\"detailCell w125\">" +
+        "No. of episodes / Theme" +
+        "</td>" +
+        "</tr>" +
+        "</table>" +
+
+        "<div class=\"detailsTableWrapper\">" +
+        "<table id=\"seriesMainTable\" class=\"tableWrapper\">";
+
+    var serialIndex = 0;
+
+    currentSeriesTypeViewDataM.forEach(function (serial) {
+        serialIndex++;
+
+        var link = serial.DL != null ? serial.DL : "www.imdb.com";
+        var tooltip = serial.N != "" ? serial.N + "\n" : "";
+        tooltip += "Click for details ... (external link!)";
+
+        //var episoadeSerial = $.grep(currentSeriesTypeViewDataD, function (el) { return el.SId == serial.Id; });
+        var alternateRowClass = serialIndex % 2 == 0 ? " alternateRow" : "";
+
+        var differentAudioStyle = serial.DifferentAudio
+            ? "style=\"color: red; cursor: help;\" title=\"Exista episoade cu diferente in track-urile audio (ex. nu sunt dublate Ro)\""
+            : "";
+
+        sectionHtml +=
+            "<tr class=\"seriesLine noselect lineWithDetails" + alternateRowClass + "\">" +
+            "<td class=\"markerCol\">" +
+            "<div class=\"markerSymbol serialExpander collapsed\" data-serialId=\"" + serial.Id + "\" alt=\">\"></div>" +
+            "</td>" +
+            "<td>" +
+            serial.FN +
+            "</td>" +
+            "<td class=\"detailCell w25\">" +
+            "<a href=\"" + link + "\" target=\"_blank\" title=\"" + tooltip + "\">" +
+            "<img src=\"Images\\info.png\" class=\"infoSign\" alt=\"i\">" +
+            "</a>" +
+            "</td>" +
+            "<td class=\"detailCell w100\">" +
+            (serial.R != ""
+                ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.R + "\nClick for details ... (external link!)' href='" + serial.RL + "' target='_blank'>" + serial.R.replace("+", "") + "</a>"
+                : "<div class='recommended' style='float: unset; margin: 0px;' title='Recomandare necunoscuta'>?</div>") +
+            "</td>" +
+            "<td class=\"detailCell w80\">" +
+            serial.Q +
+            "</td>" +
+            "<td class=\"detailCell w100\">" +
+            serial.S + " GB" +
+            "</td>" +
+            "<td class=\"detailCell w100\" " + differentAudioStyle + ">" +
+            serial.A +
+            "</td>" +
+            "<td class=\"detailCell w125\">" +
+            serial.Y +
+            "</td>" +
+            "<td class=\"detailCell w125\">" +
+            serial.Ec +
+            "</td>" +
+            "</tr>" +
+
+            "<tr class=\"detailSerieLine " + alternateRowClass + "\" data-serialId=\"" + serial.Id + "\" style=\"display: none;\">" +
+            "<td style=\"width: 30px;\">" +
+            "</td>" +
+            "<td id=\"detailSerie-inner" + serial.Id + "\" colspan=\"8\">" +
+            "</td>" +
+            "</tr>";
+
+    });
+
+    sectionHtml +=
+        "</table>" +
+        "</div>";
+
+    $(".about-message-img").css("display", "none");
+    $("#sections-wrapper").html(sectionHtml);
+
+    setTimeout(function () {
+        RebindSeriesEvents();
+
+        var h = window.innerHeight - $(".master-toolbar").outerHeight() - $("footer").height() - $("#seriesHeaderTable").height();
+        $(".detailsTableWrapper").height(h);
+
+        $(".detailsTableWrapper").slimScroll({
+            height: h
+        });
+        $("#sections-wrapper").slimScroll({
+            height: $("#sections-wrapper").height()
+        });
+
+        $(".movieTrailerLink").YouTubePopUp();
+    }, 100);
+
+    CloseSideNav();
+}
 
 function RebindSeriesEvents() {
     $(".serialExpander").off("click").on("click", function (evt) {
@@ -683,7 +703,7 @@ function ToggleExpandSeries(s) {
     if (seriesDetailsEl.text() == '') {
         var seasons =
             $.unique(
-                $.grep(detaliiEpisoade,
+                $.grep(currentSeriesTypeViewDataD,
                     function (el) {
                         return el.SId == seriesId;
                     })
@@ -692,7 +712,7 @@ function ToggleExpandSeries(s) {
                     })
             );
 
-        var serialDetails = $.grep(detaliiSeriale, function (el) { return el.Id == seriesId });
+        var serialDetails = $.grep(currentSeriesTypeViewDataM, function (el) { return el.Id == seriesId });
 
         if (seasons.length == 0 || serialDetails.length == 0) {
             console.warn("invalid data");
@@ -733,7 +753,7 @@ function ToggleExpandSeries(s) {
                 "</td>" +
                 "</tr>";
 
-            var episodesInSeason = $.grep(detaliiEpisoade, function (el) { return el.SId == seriesId && el.SZ == seasonNo; });
+            var episodesInSeason = $.grep(currentSeriesTypeViewDataD, function (el) { return el.SId == seriesId && el.SZ == seasonNo; });
 
             episodesInSeason.forEach(function (episode) {
                 seasonSection +=
@@ -907,10 +927,8 @@ function DisplayHome() {
                 if ($("#newInnerWrapper").height() < 1) //can be 0.5 on different zoom levels
                     $("#newInnerWrapper").height(280);
 
-                var sectionRenderer = function (sectionIds, isSeries) {
+                var sectionRenderer = function (sectionIds, isSeries, masterList) {
                     if (sectionIds.length > 0) {
-                        var masterList = isSeries ? detaliiSeriale : detaliiFilme;
-
                         var newMoviesDet =
                             masterList
                                 .filter(
@@ -942,6 +960,9 @@ function DisplayHome() {
 
                         $("#newInnerWrapper").html(sectionHtml);
 
+                        //issue with items cloning when items count < displayed; possible fix:
+                        //loop: ( $('.owl-carousel .items').length > 5 )
+                        //https://stackoverflow.com/questions/33119078/cloned-items-in-owl-carousel
                         setTimeout(function () {
                             $("#newMovies").owlCarousel({
                                 autoplay: true,
@@ -977,15 +998,19 @@ function DisplayHome() {
 
                 switch ($(this).data("type")) {
                     case 0:
-                        sectionRenderer(newMovies, false);
+                        sectionRenderer(newMovies, false, detaliiFilme);
                         break;
 
                     case 1:
-                        sectionRenderer(updatedMovies, false);
+                        sectionRenderer(updatedMovies, false, detaliiFilme);
                         break;
 
                     case 2:
-                        sectionRenderer(newSeriesEpisodes, true);
+                        sectionRenderer(newSeriesEpisodes, true, detaliiSeriale);
+                        break;
+
+                    case 3:
+                        sectionRenderer(newRecordingsEpisodes, true, detaliiRecordings);
                         break;
                 }
 
