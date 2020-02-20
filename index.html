@@ -1,0 +1,147 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Cartoons Repository</title>
+
+<link rel="shortcut icon" href="Images\mickey_mouse.png">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mouse+Memoirs">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mountains+of+Christmas|Yanone+Kaffeesatz:700">
+
+<link type="text/css" rel="stylesheet" href="Styles/desene.css?version=2.0.1177.3701" />
+<link type="text/css" rel="stylesheet" href="Styles/sections.css?version=2.0.1177.3701" />
+<link type="text/css" rel="stylesheet" href="Styles/jsgrid.min.css" />
+<link type="text/css" rel="stylesheet" href="Styles/jsgrid-theme.min.css" />
+<!--<link type="text/css" rel="stylesheet" href="Styles/YouTubePopUp.css">-->
+<link rel="stylesheet" type="text/css" href="Styles/owl.carousel.min.css" />
+
+
+<script type="text/javascript" src="Scripts/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="Scripts/jquery.lazy.min.js"></script>
+<script type="text/javascript" src="Scripts/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" src="Scripts/jsgrid.min.js"></script>
+<!--<script type="text/javascript" src="Scripts/YouTubePopUp.jquery.js"></script>-->
+<script type="text/javascript" src="Scripts/owl.carousel.min.js"></script>
+
+<script src="https://www.youtube.com/player_api"></script>
+
+<script type="text/javascript" src="Scripts/desene.js?version=2.0.1177.3701"></script>
+<script type="text/javascript" src="Scripts/moviesDetails.js?version=2.0.1177.3701"></script>    <!--this get's versioned in app -->
+<script type="text/javascript" src="Scripts/seriesDetails.js?version=2.0.1177.3701"></script>
+<script type="text/javascript" src="Scripts/recordingDetails.js?version=2.0.1177.3701"></script>
+<script type="text/javascript" src="Scripts/moviesDetails2.js?version=2.0.1177.3701"></script>
+
+<div>
+    <div class="master-toolbar">
+        <div class="master-toolbar-row">
+            <div class="vertical-menu-button-wrapper">
+                <div class="menu-button"></div>
+            </div>
+            <div class="title-wrapper">
+                Cartoons Repository
+            </div>
+            <div class="search-wrapper">
+                <div class="homeButton">
+                    <div>🏠</div>
+                </div>
+            </div>
+            <div class="search-wrapper">
+                <input id="searchCtrl" class="searchImg" type="search" placeholder="Search all sections ...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="sideNav" class="sidenav">
+    <div id="rootNav">
+        <span class="closebtn" style="padding-bottom: 0px">&times;</span>
+        <span data-categ="0">Home</span>
+        <span data-categ="1">Movies</span>
+        <span data-categ="2">TV Shows</span>
+        <span data-categ="3">Recordings (Raw)</span>
+        <span data-categ="4">Collections (Mix)</span>
+    </div>
+    <div id="moviesSections" style="display: none;">
+        <span data-categ="-1">back</span>
+        <div>Sections:</div>
+        <span data-categ="10" data-titleStartWith="0,1,2,3,4,5,6,7,8,9">0 ... 9</span>
+        <span data-categ="11" data-titleStartWith="A,B,C">A ... C</span>
+        <span data-categ="12" data-titleStartWith="D,E,F,G,H">D ... H</span>
+        <span data-categ="13" data-titleStartWith="I,J,K,L,M,N">I ... N</span>
+        <span data-categ="14" data-titleStartWith="O,P,R,Q,S">O ... S</span>
+        <span data-categ="15" data-titleStartWith="T">T</span>
+        <span data-categ="16" data-titleStartWith="U,V,W,X,Y,Z">U ... Z</span>
+        <span data-categ="17">All (grid)</span>
+    </div>
+</div>
+
+<div class="sideNav-overlay">
+</div>
+<div id="sections-wrapper">
+
+</div>
+
+<img src="Images\msg.png" class="about-message-img">
+
+<footer>
+    <table class="footerWrapper">
+        <tr>
+            <td id="genVersion"></td>
+            <td id="snapshotStat" style="width: 100%; text-align: center;"></td>
+        </tr>
+    </table>
+</footer>
+
+<div id="homePageContent" style="display: none;">
+    <div class="aboutPage-warning-title">
+        Warning!
+    </div>
+    <div class="aboutPage-warning-text">
+        None of these movies are for sale or hosted on this site!
+        </br>
+        This is a personal index used exclusivelly by me, my family and my friends.
+        </br>
+        Feel free to contact me at c*************u@g***l.com
+    </div>
+
+    <div id="mobileWarning" class="owl-carousel owl-theme">
+        Also ... it seems you're viewing the site from a mobile device. If so, be aware that it's not optimised for
+        </br>
+        small displays, and some information is only displayed as tooltip!
+    </div>
+
+
+
+    <div id="newWrapper" style="position: absolute; bottom: 0; width: 100%;">
+        <div class='tabbed round'>
+            <ul>
+                <li data-type="0">New movies</li>
+                <li data-type="1">Updated movies</li>
+                <li data-type="2">New series/episodes</li>
+                <li data-type="3">New recordings/episodes</li>
+            </ul>
+
+            <div class="closeNewsSectionWrapper">
+                <button id="closeNewsSection" class="circle" data-animation="xMarks" title="Close the 'News' sections"></button>
+            </div>
+        </div>
+
+        <div id="newInnerWrapper">
+        </div>
+    </div>
+</div>
+
+<div id="posterNotFound" style="display: none;">
+    <div class="imageNotFound" style="display: table;">
+        <div style="display: table-row;">
+            <div class="movieTitle-posterNotFound infoTextPosterNotFound">
+
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div class="infoTextPosterNotFound">
+                poster not found!
+            </div>
+        </div>
+    </div>
+</div>
