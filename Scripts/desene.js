@@ -222,7 +222,7 @@ $(document).ready(function () {
                     "</td>" +
                     "</tr>" +
                     "<tr style='height: 100%;'>" +
-                    "<td style='min-width: 315px; vertical-align: top;'>" +
+                    "<td style='vertical-align: top;'>" +
                     "<div class='synopsis'>" +
                     detailData.Syn +
                     "</div>" +
@@ -258,7 +258,7 @@ $(document).ready(function () {
                 detailLine +=
                     "</div>" +
                     "</td>" +
-                    "<td style='width: 100%; border-left: solid thin silver;'>" +
+                    "<td style='min-width: 500px; border-left: solid thin silver;'>" +
                     "<div class='screenshots-wrapper owl-carousel owl-theme' style=''>" +
                     "<div>" +
                     "<iframe" +
