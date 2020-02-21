@@ -112,14 +112,14 @@ $(document).ready(function () {
     var buildMoviesSection = function (moviesInSection) {
         var sectionHtml =
             "<div class=\"container\">" +
-                "<div class=\"cards\">";
+            "<div class=\"cards\">";
 
         var mobileClass = "";//= isMobile() ? "cardM" : "";
         moviesInSection.forEach(function (el) {
             sectionHtml +=
-                    "<div class=\"card " + mobileClass + "\">" +
-                        "<div class=\"movie-detail-wrapper\" data-movieId=\"" + el.Id + "\">" +
-                            "<div class=\"movie-detail\">" +
+                "<div class=\"card " + mobileClass + "\">" +
+                "<div class=\"movie-detail-wrapper\" data-movieId=\"" + el.Id + "\">" +
+                "<div class=\"movie-detail\">" +
 
                 //the movieId is also placed on the Poster to be visible in the lazy loading process
 
@@ -132,28 +132,28 @@ $(document).ready(function () {
                         "</a>"
                     */
 
-                                "<img data-src=\"Imgs/Movies/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\" title=\"" + el.FN + "\">"
+                    "<img data-src=\"Imgs/Movies/poster-" + el.Id + ".jpg\" data-movieId=\"" + el.Id + "\" class=\"movie-cover lazy\" alt=\"Loading poster ...\" title=\"" + el.FN + "\">"
 
                 ) +
 
-                            "</div>" +
-                            "<div class=\"movie-detail\">" +
-                                (
-                                    el.R != ""
-                                        ? "<a class='recommended' title='Recomandat: " + el.R + "\nClick for details ... (external link!)' href='" + el.RL + "' target='_blank'>" + el.R.replace("+", "") + "</a>"
-                                        : "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
-                                ) +
+                "</div>" +
+                "<div class=\"movie-detail\">" +
+                (
+                    el.R != ""
+                        ? "<a class='recommended' title='Recomandat: " + el.R + "\nClick for details ... (external link!)' href='" + el.RL + "' target='_blank'>" + el.R.replace("+", "") + "</a>"
+                        : "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
+                ) +
 
-                                "<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "\nAn: " + el.Y + "\nDurata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "\nClick for details ... (external link!)' href='" + el.DL + "' target='_blank'>i</a>" +
-                                "<div class='quality' title='Dimensiune: " + el.S + "\nBitrate: " + el.B + "'>" + (el.Q == "" ? "SD?" : el.Q) + "</div>" +
-                                "<div class='audio' title='Subtitrari: " + el.SU + "\nSursaNl: " + el.Nl + "'>" + el.A + "</div>" +
-                            "</div>" +
-                        "</div>" +
-                    "</div>";
+                "<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "\nAn: " + el.Y + "\nDurata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "\nClick for details ... (external link!)' href='" + el.DL + "' target='_blank'>i</a>" +
+                "<div class='quality' title='Dimensiune: " + el.S + "\nBitrate: " + el.B + "'>" + (el.Q == "" ? "SD?" : el.Q) + "</div>" +
+                "<div class='audio' title='Subtitrari: " + el.SU + "\nSursaNl: " + el.Nl + "'>" + el.A + "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>";
         }, this);
 
         sectionHtml +=
-                "</div>" +
+            "</div>" +
             "</div>";
 
         $("#sections-wrapper").scrollTop(0);
@@ -175,164 +175,170 @@ $(document).ready(function () {
                 },
             });
 
-            $("#sections-wrapper").slimScroll({
-                height: $("#sections-wrapper").height()
-            });
+            if (!isMobile()) {
+                $("#sections-wrapper").slimScroll({
+                    height: $("#sections-wrapper").height()
+                });
+            }
 
-            $(".movieTrailerLink").YouTubePopUp();
+            //$(".movieTrailerLink").YouTubePopUp();
         }, 100);
 
         CloseSideNav();
         $(".about-message-img").css("display", "none");
 
         $(".card").off("click").on("click", function () {
-            $(".card").removeClass("selectedCard");
-            $('.detailLine').remove();
-
-            $(this).addClass("selectedCard");
-
-            var clickedTop = $(this).offset().top;
-            var visibleElements = $(this).parent().find(".card:visible");
-            var elementsOnLine =
-                $.grep(visibleElements, function (el) { return $(el).offset().top == clickedTop; });
-
-            var lastElementOnLine = elementsOnLine[elementsOnLine.length - 1];
-
-
             var movieId = $(this).children().data("movieid");
 
-            var movieData = $.grep(moviesData, function (el) { return el.Id == movieId });
-            var baseData = movieData[0];
+            $(".card").removeClass("selectedCard");
 
-            var movieData2 = $.grep(moviesData2, function (el) { return el.Id == movieId });
-            var detailData = movieData2[0];
+            if ($(".detailLine[data-movieid='" + movieId + "']").length > 0) {
+                $('.detailLine').remove();
+            }
+            else {
+                $(this).addClass("selectedCard");
 
-            var detailLine =
-                "<div class='detailLine'>" +
+                var clickedTop = $(this).offset().top;
+                var visibleElements = $(this).parent().find(".card:visible");
+                var elementsOnLine =
+                    $.grep(visibleElements, function (el) { return $(el).offset().top == clickedTop; });
+
+                var lastElementOnLine = elementsOnLine[elementsOnLine.length - 1];
+
+
+
+                var movieData = $.grep(moviesData, function (el) { return el.Id == movieId });
+                var baseData = movieData[0];
+
+                var movieData2 = $.grep(moviesData2, function (el) { return el.Id == movieId });
+                var detailData = movieData2[0];
+
+                var detailLine =
+                    "<div class='detailLine' data-movieId='" + movieId + "'>" +
                     "<table class='detailLine-wrapper'>" +
-                        "<tr>" +
-                            "<td colspan='3' class='title'>" +
-                                baseData.FN +
-                            "</td>" +
-                        "</tr>" +
-                        "<tr style='height: 100%;'>" +
-                            "<td style='min-width: 500px; vertical-align: top;'>" +
-                                "<div class='synopsis'>" +
-                                    detailData.Syn +
-                                "</div>" +
-                            "</td>" +
-                            "<td class='technicalDetailsCell'>" +
-                                "<div class='technicalDetails-wrapper'>" +
-                                    "<div class='tdTitle'>Video tracks</div>";
+                    "<tr>" +
+                    "<td colspan='3' class='title'>" +
+                    baseData.FN +
+                    "</td>" +
+                    "</tr>" +
+                    "<tr style='height: 100%;'>" +
+                    "<td style='min-width: 315px; vertical-align: top;'>" +
+                    "<div class='synopsis'>" +
+                    detailData.Syn +
+                    "</div>" +
+                    "</td>" +
+                    "<td class='technicalDetailsCell'>" +
+                    "<div class='technicalDetails-wrapper'>" +
+                    "<div class='tdTitle'>Video tracks</div>";
 
-            for (var i = 0; i < detailData.Vtd.length; i++) {
-                detailLine += "<div>" + detailData.Vtd[i] + "</div>";
-            }
-
-            detailLine += "<div class='tdTitle'>Audio tracks</div>";
-
-            for (var i = 0; i < detailData.Ats.length; i++) {
-                detailLine += "<div>" + detailData.Ats[i] + "</div>";
-            }
-
-            detailLine += "<div class='tdTitle'>Subtitle tracks</div>";
-
-            for (var i = 0; i < detailData.Sts.length; i++) {
-                detailLine += "<div>" + detailData.Sts[i] + "</div>";
-            }
-
-            detailLine += "<div class='tdTitle'>File details</div>";
-
-            for (var i = 0; i < detailData.Fd.length; i++) {
-                detailLine += "<div>" + detailData.Fd[i] + "</div>";
-            }
-
-
-
-            detailLine +=
-                                "</div>" +
-                            "</td>" +
-                            "<td style='width: 100%; border-left: solid thin silver;'>" +
-                                "<div class='screenshots-wrapper owl-carousel owl-theme' style=''>" +
-                                    "<div>" +
-                                        "<iframe" +
-                                            " id='trailerFrm'" +
-                                            " frameborder='0'" +
-                                            " scrolling='no'" +
-                                            " marginheight='0'" +
-                                            " marginwidth='0'" +
-                                            " width='400.5'" +
-                                            " height='225'" +
-                                            " type='text/html'" +
-                                            //" allowfullscreen" +
-                                            // src='https://www.youtube.com/embed/DBXH9jJRaDk?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&enablejsapi=1'>" +
-                                            " src='https://www.youtube.com/embed/" + baseData.Tr + "?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&enablejsapi=1' > " +
-                                        "</iframe>" +
-                                    "</div>" +
-                                    "<div class='parentVertAlign'>" +
-                                        "<img class='forceVertAlign' src=\"Imgs\\Movies\\Thumbnails\\thumb-" + movieId + "-0.jpg\" alt=\"?\">" +
-                                    "</div>" +
-                                    "<div class='parentVertAlign'>" +
-                                        "<img class='forceVertAlign' src=\"Imgs\\Movies\\Thumbnails\\thumb-" + movieId + "-1.jpg\" alt=\"?\">" +
-                                    "</div>" +
-                                    "<div class='parentVertAlign'>" +
-                                        "<img class='forceVertAlign' src=\"Imgs\\Movies\\Thumbnails\\thumb-" + movieId + "-2.jpg\" alt=\"?\">" +
-                                    "</div>" +
-                                "</div>" +
-                            "</td>" +
-                        "</tr>" +
-                    "</table>" +
-                "</div>";
-
-            $(lastElementOnLine).after(detailLine);
-
-
-            $(".synopsis, .technicalDetails-wrapper").slimScroll({
-                height: $(".synopsis").height()
-            });
-
-            //hideBarY
-            $(".detailLine .slimScrollBar").fadeOut('slow');
-            $(".detailLine .slimScrollRail").fadeOut('slow');
-
-
-            var player = new YT.Player('trailerFrm', {
-                events: { 'onStateChange': onPlayerStateChange }
-            });
-
-            $('.screenshots-wrapper').owlCarousel({
-                margin: 10,
-                nav: true,
-                navText: ["<div class='nav-btn prev-slide'></div>", "<div class='nav-btn next-slide'></div>"],
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 1
-                    },
-                    1000: {
-                        items: 1
-                    }
+                for (var i = 0; i < detailData.Vtd.length; i++) {
+                    detailLine += "<div>" + detailData.Vtd[i] + "</div>";
                 }
-            });
 
-            $(".screenshots-wrapper").on("changed.owl.carousel",
-                function (event) {
-                    //console.log(event);
-                    if (event.type == "changed" && trailerPlaying) {
-                        //full refresh of the iframe
-                        //var leg=$('#trailerFrm').attr("src");
-                        //$('#trailerFrm').attr("src", leg);
+                detailLine += "<div class='tdTitle'>Audio tracks</div>";
 
-                        trailerPlaying = false;
-                        player.pauseVideo();
-                        //player.stopVideo();
+                for (var i = 0; i < detailData.Ats.length; i++) {
+                    detailLine += "<div>" + detailData.Ats[i] + "</div>";
+                }
+
+                detailLine += "<div class='tdTitle'>Subtitle tracks</div>";
+
+                for (var i = 0; i < detailData.Sts.length; i++) {
+                    detailLine += "<div>" + detailData.Sts[i] + "</div>";
+                }
+
+                detailLine += "<div class='tdTitle'>File details</div>";
+
+                for (var i = 0; i < detailData.Fd.length; i++) {
+                    detailLine += "<div>" + detailData.Fd[i] + "</div>";
+                }
+
+
+
+                detailLine +=
+                    "</div>" +
+                    "</td>" +
+                    "<td style='width: 100%; border-left: solid thin silver;'>" +
+                    "<div class='screenshots-wrapper owl-carousel owl-theme' style=''>" +
+                    "<div>" +
+                    "<iframe" +
+                    " id='trailerFrm'" +
+                    " frameborder='0'" +
+                    " scrolling='no'" +
+                    " marginheight='0'" +
+                    " marginwidth='0'" +
+                    " width='400.5'" +
+                    " height='225'" +
+                    " type='text/html'" +
+                    //" allowfullscreen" +
+                    " src='https://www.youtube.com/embed/" + baseData.Tr + "?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&enablejsapi=1' > " +
+                    "</iframe>" +
+                    "</div>" +
+                    "<div class='parentVertAlign'>" +
+                    "<img class='forceVertAlign' src=\"Imgs\\Movies\\Thumbnails\\thumb-" + movieId + "-0.jpg\" alt=\"?\">" +
+                    "</div>" +
+                    "<div class='parentVertAlign'>" +
+                    "<img class='forceVertAlign' src=\"Imgs\\Movies\\Thumbnails\\thumb-" + movieId + "-1.jpg\" alt=\"?\">" +
+                    "</div>" +
+                    "<div class='parentVertAlign'>" +
+                    "<img class='forceVertAlign' src=\"Imgs\\Movies\\Thumbnails\\thumb-" + movieId + "-2.jpg\" alt=\"?\">" +
+                    "</div>" +
+                    "</div>" +
+                    "</td>" +
+                    "</tr>" +
+                    "</table>" +
+                    "</div>";
+
+                $(lastElementOnLine).after(detailLine);
+
+
+                $(".synopsis, .technicalDetails-wrapper").slimScroll({
+                    height: $(".synopsis").height()
+                });
+
+                //hideBarY
+                $(".detailLine .slimScrollBar").fadeOut('slow');
+                $(".detailLine .slimScrollRail").fadeOut('slow');
+
+
+                var player = new YT.Player('trailerFrm', {
+                    events: { 'onStateChange': onPlayerStateChange }
+                });
+
+                $('.screenshots-wrapper').owlCarousel({
+                    margin: 10,
+                    nav: true,
+                    navText: ["<div class='nav-btn prev-slide'></div>", "<div class='nav-btn next-slide'></div>"],
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 1
+                        },
+                        1000: {
+                            items: 1
+                        }
                     }
                 });
 
-            //$("#sections-wrapper").animate({scrollTop: $("#sections-wrapper").scrollTop() + $(".detailLine").prop("scrollHeight")+50}, 500);
-            ScrollDetailInView();
+                $(".screenshots-wrapper").on("changed.owl.carousel",
+                    function (event) {
+                        //console.log(event);
+                        if (event.type == "changed" && trailerPlaying) {
+                            //full refresh of the iframe
+                            //var leg=$('#trailerFrm').attr("src");
+                            //$('#trailerFrm').attr("src", leg);
+
+                            trailerPlaying = false;
+                            player.pauseVideo();
+                            //player.stopVideo();
+                        }
+                    });
+
+                //$("#sections-wrapper").animate({scrollTop: $("#sections-wrapper").scrollTop() + $(".detailLine").prop("scrollHeight")+50}, 500);
+                ScrollDetailInView();
+            }
         });
     }
 
@@ -789,17 +795,19 @@ function RenderSeriesTypeView() {
     setTimeout(function () {
         RebindSeriesEvents();
 
-        var h = window.innerHeight - $(".master-toolbar").outerHeight() - $("footer").height() - $("#seriesHeaderTable").height();
-        $(".detailsTableWrapper").height(h);
+        if (!isMobile()) {
+            var h = window.innerHeight - $(".master-toolbar").outerHeight() - $("footer").height() - $("#seriesHeaderTable").height();
+            $(".detailsTableWrapper").height(h);
 
-        $(".detailsTableWrapper").slimScroll({
-            height: h
-        });
-        $("#sections-wrapper").slimScroll({
-            height: $("#sections-wrapper").height()
-        });
+            $(".detailsTableWrapper").slimScroll({
+                height: h
+            });
+            $("#sections-wrapper").slimScroll({
+                height: $("#sections-wrapper").height()
+            });
+        }
 
-        $(".movieTrailerLink").YouTubePopUp();
+        //$(".movieTrailerLink").YouTubePopUp();
     }, 100);
 
     CloseSideNav();
@@ -1201,9 +1209,12 @@ function ResizeMoviesSection() {
     var h = window.innerHeight - $(".master-toolbar").outerHeight() - $("footer").height();
     $("#sections-wrapper").height(h);
 
-    $("#sections-wrapper").slimScroll({
-        height: h
-    });
+    //$("#newWrapper").css("bottom", $("footer").height() + "px");
+    if (!isMobile()) {
+        $("#sections-wrapper").slimScroll({
+            height: h
+        });
+    }
 
     if ($("#jsGrid").length > 0) {
         var gridWrapperHeight = h - $(".jsgrid-pager-container").height() - 1;
@@ -1217,6 +1228,7 @@ function ResizeMoviesSection() {
 
     $(".card").removeClass("selectedCard");
     $('.detailLine').remove();
+
 }
 
 function isMobile() {
@@ -1225,7 +1237,10 @@ function isMobile() {
 }
 
 function ScrollDetailInView() {
-    var scrollTop = $(".selectedCard").offset().top - $("#sections-wrapper").offset().top;
+    var scrollTop =
+        isMobile() && $(document).height() < $(document).width() //mobile on landscape
+            ? $(".detailLine").offset().top - $("#sections-wrapper").offset().top
+            : $(".selectedCard").offset().top - $("#sections-wrapper").offset().top;
 
     // Position of selected element relative to container top
     var targetTop = $("#sections-wrapper > *").offset().top - $("#sections-wrapper").offset().top;
