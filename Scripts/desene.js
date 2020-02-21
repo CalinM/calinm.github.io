@@ -191,11 +191,11 @@ $(document).ready(function () {
             var movieId = $(this).children().data("movieid");
 
             $(".card").removeClass("selectedCard");
-
             if ($(".detailLine[data-movieid='" + movieId + "']").length > 0) {
-                $('.detailLine').remove();
+                $('.detailLine').remove(); //only remove, nothing more
             }
             else {
+                $('.detailLine').remove();
                 $(this).addClass("selectedCard");
 
                 var clickedTop = $(this).offset().top;
@@ -205,7 +205,10 @@ $(document).ready(function () {
 
                 var lastElementOnLine = elementsOnLine[elementsOnLine.length - 1];
 
+                var bgImageDetailLine = "url(\"" + $("img[data-movieid='" + movieId + "']").attr("src") + "\")";
+                var widthInnerTable = (elementsOnLine.length - 1) * $(".selectedCard").outerWidth(true) + $(".selectedCard").width();
 
+                var middleColWidth = elementsOnLine.length > 3 ? "150" : "125";
 
                 var movieData = $.grep(moviesData, function (el) { return el.Id == movieId });
                 var baseData = movieData[0];
@@ -214,20 +217,20 @@ $(document).ready(function () {
                 var detailData = movieData2[0];
 
                 var detailLine =
-                    "<div class='detailLine' data-movieId='" + movieId + "'>" +
-                    "<table class='detailLine-wrapper'>" +
+                    "<div class='detailLine' data-movieId='" + movieId + "' style='background-image: " + bgImageDetailLine + "'>" +
+                    "<table class='detailLine-wrapper' style='width: " + widthInnerTable + "px'>" +
                     "<tr>" +
                     "<td colspan='3' class='title'>" +
                     baseData.FN +
                     "</td>" +
                     "</tr>" +
                     "<tr style='height: 100%;'>" +
-                    "<td style='vertical-align: top;'>" +
+                    "<td style='width: 100%; vertical-align: top;'>" +
                     "<div class='synopsis'>" +
                     detailData.Syn +
                     "</div>" +
                     "</td>" +
-                    "<td class='technicalDetailsCell'>" +
+                    "<td class='technicalDetailsCell' style='min-width: " + middleColWidth + "px; max-width: " + middleColWidth + "px;'>" +
                     "<div class='technicalDetails-wrapper'>" +
                     "<div class='tdTitle'>Video tracks</div>";
 
