@@ -859,6 +859,16 @@ function RebindSeriesEvents() {
     });
 }
 
+function unique(array) {
+    return $.grep(array, function (el, index) {
+        return index == $.inArray(el, array);
+    });
+}
+
+function isNumeric(val) {
+    return /^\d+$/.test(val);
+}
+
 function ToggleExpandSeries(s) {
     var seriesId = $(s).data("serialid");
 
@@ -869,20 +879,28 @@ function ToggleExpandSeries(s) {
 
     var seriesDetailsEl = $("#detailSerie-inner" + seriesId);
     if (seriesDetailsEl.text() == '') {
-        var seasons =
-            $.unique(
-                $.grep(currentSeriesTypeViewDataD,
-                    function (el) {
-                        return el.SId == seriesId;
-                    })
-                    .map(function (el) {
-                        return el.SZ;
-                    })
-            );
+
+        var seriesSeasons = new Array();
+
+        unique(
+            $.grep(currentSeriesTypeViewDataD,
+                function (el) {
+                    return el.SId == seriesId;
+                })
+                .map(function (el) {
+                    return el.SZ;
+                })
+        ).forEach(function (seasonNo) {
+            seriesSeasons.push({ SeasonId: seasonNo, SeasonName: isNumeric(seasonNo) ? "Season " + seasonNo : seasonNo })
+        });
+
+        var sortedSeasons =
+            seriesSeasons.sort((a, b) => a.SeasonName.localeCompare(b.SeasonName, undefined, { numeric: true, sensitivity: 'base' }));
+
 
         var serialDetails = $.grep(currentSeriesTypeViewDataM, function (el) { return el.Id == seriesId });
 
-        if (seasons.length == 0 || serialDetails.length == 0) {
+        if (sortedSeasons.length == 0 || serialDetails.length == 0) {
             console.warn("invalid data");
             return;
         }
@@ -906,26 +924,25 @@ function ToggleExpandSeries(s) {
             "<td style=\"vertical-align: top;\">";
 
         var firstSeason = true;
-        var hasSpecial = false;
 
-        var addSeason = function (seasonNo) {
+        var addSeason = function (seasonObj) {
             var seasonSection =
                 "<table class=\"tableWrapper\">" +
                 "<tr class=\"seasonLine noselect lineWithDetails\">" +
                 "<td class=\"markerCol\">" +
-                "<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + seriesId + "\" data-sezon=\"" + seasonNo + "\">" +
+                "<div class=\"markerSymbol sezonExpander " + (firstSeason ? "expanded" : "collapsed") + "\" data-serialId=\"" + seriesId + "\" data-sezon=\"" + seasonObj.SeasonId + "\">" +
                 "</div>" +
                 "</td>" +
                 "<td colspan='6'>" +
-                (seasonNo == -2 ? "Specials" : "Season " + seasonNo) +
+                seasonObj.SeasonName +
                 "</td>" +
                 "</tr>";
 
-            var episodesInSeason = $.grep(currentSeriesTypeViewDataD, function (el) { return el.SId == seriesId && el.SZ == seasonNo; });
+            var episodesInSeason = $.grep(currentSeriesTypeViewDataD, function (el) { return el.SId == seriesId && el.SZ == seasonObj.SeasonId; });
 
             episodesInSeason.forEach(function (episode) {
                 seasonSection +=
-                    "<tr class=\"episoadeLine\" data-serialId=\"" + seriesId + "\" data-sezon=\"" + seasonNo + "\" data-episodeId=\"" + episode.Id +
+                    "<tr class=\"episoadeLine\" data-serialId=\"" + seriesId + "\" data-sezon=\"" + seasonObj.SeasonId + "\" data-episodeId=\"" + episode.Id +
                     "\" style=\"" + (firstSeason ? "display: table-row;" : "display: none;") + "\">" +
 
                     "<td style=\"width: 30px;\">" +
@@ -988,20 +1005,10 @@ function ToggleExpandSeries(s) {
             return seasonSection;
         }
 
-        seasons.forEach(function (seasonNo) {
-            if (seasonNo == -2) {
-                hasSpecial = true;
-                return;
-            }
-
-            seriesDetailsHtml += addSeason(seasonNo);
+        sortedSeasons.forEach(function (seasonObj) {
+            seriesDetailsHtml += addSeason(seasonObj);
             firstSeason = false;
         });
-
-
-        if (hasSpecial) {
-            seriesDetailsHtml += addSeason(-2);
-        }
 
         seriesDetailsHtml +=
             "</td>" +
