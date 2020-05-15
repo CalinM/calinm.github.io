@@ -463,3 +463,14 @@ html, body {
     .thumbnailStillCell img {
         max-height: 235px;
     }
+
+.collectionT0-new-cover {
+    font-size: 24px;
+    font-family: 'Mouse Memoirs', sans-serif;
+    height: 250px;
+    width: 161px;
+    display: table-cell;
+    vertical-align: middle;
+    border: solid thin gray;
+    border-radius: 5px;
+}
