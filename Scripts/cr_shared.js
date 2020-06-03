@@ -2,16 +2,16 @@ var trailerPlaying = false;
 var searchResultTimer = null;
 
 var waitForFinalEvent = (function () {
-    var timers = {};
-    return function (callback, ms, uniqueId) {
-        if (!uniqueId) {
-            uniqueId = "Don't call this twice without a uniqueId";
-        }
-        if (timers[uniqueId]) {
-            clearTimeout(timers[uniqueId]);
-        }
-        timers[uniqueId] = setTimeout(callback, ms);
-    };
+	var timers = {};
+	return function (callback, ms, uniqueId) {
+		if (!uniqueId) {
+			uniqueId = "Don't call this twice without a uniqueId";
+		}
+		if (timers[uniqueId]) {
+			clearTimeout(timers[uniqueId]);
+		}
+		timers[uniqueId] = setTimeout(callback, ms);
+	};
 })();
 
 function DisplayHome() {
@@ -77,13 +77,13 @@ function DisplayHome() {
 							{
 								sectionHtml +=
 									"<div class=\"collectionT0-new-cover\" title=\"" + tooltip + "\">" +
-										el.FN +
+									el.FN +
 									"</div>";
 							}
 							else {
 								sectionHtml +=
 									"<div>" +
-										"<img src=\"Imgs/" + extraPath + "/poster-" + el.Id + ".jpg\" class=\"movie-cover-new\" alt=\"Loading poster ...\" title=\"" + tooltip + "\">" +
+									"<img src=\"Imgs/" + extraPath + "/poster-" + el.Id + ".jpg\" class=\"movie-cover-new\" alt=\"Loading poster ...\" title=\"" + tooltip + "\">" +
 									"</div>";
 							}
 						});
@@ -100,21 +100,19 @@ function DisplayHome() {
 				var collectionSectionRenderer = function () {
 					var sectionHtml = "<div id=\"newMovies\" class=\"owl-carousel owl-theme\">";
 
-					Object.keys(newElementsInCol).sort((a,b) => b-a).forEach(function(elId) {
+					Object.keys(newElementsInCol).sort((a, b) => b - a).forEach(function (elId) {
 						var colId = newElementsInCol[elId];
 						var elData;
 
-						if (elId == colId)
-						{
+						if (elId == colId) {
 							//console.log("series-type");
 							elData = $.grep(collectionsData, function (x) { return x.Id == colId; });
-						}							
-						else
-						{							
-							//console.log("movie-type");
-							elData = $.grep(collectionsElements, function (x) { return x.Id == elId; });							
 						}
-												
+						else {
+							//console.log("movie-type");
+							elData = $.grep(collectionsElements, function (x) { return x.Id == elId; });
+						}
+
 						var tooltip =
 							"Title: " + elData[0].FN + "\n" +
 							"Quality: " + elData[0].Q + "\n" +
@@ -124,17 +122,17 @@ function DisplayHome() {
 
 						sectionHtml +=
 							"<div>" +
-								"<img src=\"Imgs/Collections/poster-" + elData[0].Id + ".jpg\" class=\"movie-cover-new\" title=\"" + tooltip + "\" alt=\"" + elData[0].FN + "\">" +
+							"<img src=\"Imgs/Collections/poster-" + elData[0].Id + ".jpg\" class=\"movie-cover-new\" title=\"" + tooltip + "\" alt=\"" + elData[0].FN + "\">" +
 							"</div>";
 					});
 
 					sectionHtml += "</div>";
 
 					finishRenderSection(sectionHtml);
-	
+
 				}
-				
-				var finishRenderSection = function(sectionContent) {
+
+				var finishRenderSection = function (sectionContent) {
 					$("#newInnerWrapper").html(sectionContent);
 
 					//issue with items cloning when items count < displayed; possible fix:
@@ -171,7 +169,7 @@ function DisplayHome() {
 								}
 							}
 						});
-					}, 0);				
+					}, 0);
 				}
 
 				switch ($(this).data("type")) {
@@ -503,11 +501,11 @@ function BuildMoviesSection(moviesInSection, outputToElement) {
 
 			// Scroll untill target element is at the top of its container
 			//$("#sections-wrapper").scrollTop(scrollOffset);
-			
+
 			if (outputToElement == null)
 				$("#sections-wrapper").animate({ scrollTop: scrollOffset }, 500);
 			else
-				$(".detailsTableWrapper").animate({ scrollTop: scrollOffset }, 500);	
+				$(".detailsTableWrapper").animate({ scrollTop: scrollOffset }, 500);
 		}
 	});
 }
