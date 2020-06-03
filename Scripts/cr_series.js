@@ -170,7 +170,7 @@ function RebindSeriesEvents() {
             else
             {
                 var thumbnailRowStr =
-                    "<tr id=\"th-" +episodeId + "\" class=\"thRow\" style=\"display: table-row;\">" + //data-serialId=\"" + serial.Id + "\" data-sezon=\"" + episod.SZ + "\"
+                    "<tr id=\"th-" +episodeId + "\" class=\"thRow\" style=\"display: table-row;\" data-serialId=\"" + currentRow.data("serialid") + "\" data-sezon=\"" + currentRow.data("sezon") + "\" >" +
                         "<td style=\"width: 30px;\">" +
                         "</td>" +
                         "<td colspan=\"8\">" +

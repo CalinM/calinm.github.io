@@ -8,10 +8,11 @@ $(document).ready(function () {
 
 $(window).resize(function () {
     //triggering the recalculation only when the resize has stop
-    // waitForFinalEvent(function () {
-    //     ResizeMoviesSection();
-    // }, 100, "contentWrapper");
-    setTimeout(function () { ResizeMoviesSection(); }, 100);
+    waitForFinalEvent(function () {
+        ResizeMoviesSection();
+    }, 100, "contentWrapper");
+
+    //setTimeout(function () { ResizeMoviesSection(); }, 100);
 });
 
 
@@ -181,7 +182,10 @@ function ResizeMoviesSection() {
         $("#sections-wrapper").slimScroll({
             height: h
         });
+        
+        $('.slimScrollDiv').height(h);        
     }
+
 
     if ($("#jsGrid").length > 0) {
         var gridWrapperHeight = h - $(".jsgrid-pager-container").height() - 1;
@@ -195,5 +199,4 @@ function ResizeMoviesSection() {
 
     $(".card").removeClass("selectedCard");
     $('.detailLine').remove();
-
 }
