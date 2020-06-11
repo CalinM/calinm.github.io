@@ -2,16 +2,16 @@ var trailerPlaying = false;
 var searchResultTimer = null;
 
 var waitForFinalEvent = (function () {
-	var timers = {};
-	return function (callback, ms, uniqueId) {
-		if (!uniqueId) {
-			uniqueId = "Don't call this twice without a uniqueId";
-		}
-		if (timers[uniqueId]) {
-			clearTimeout(timers[uniqueId]);
-		}
-		timers[uniqueId] = setTimeout(callback, ms);
-	};
+    var timers = {};
+    return function (callback, ms, uniqueId) {
+        if (!uniqueId) {
+            uniqueId = "Don't call this twice without a uniqueId";
+        }
+        if (timers[uniqueId]) {
+            clearTimeout(timers[uniqueId]);
+        }
+        timers[uniqueId] = setTimeout(callback, ms);
+    };
 })();
 
 function DisplayHome() {
@@ -25,6 +25,9 @@ function DisplayHome() {
 
 	$("#mobileWarning").css("display", isMobile() ? "block" : "none");
 	$("#snapshotStat").html("");
+
+	$(".closeNewsSectionWrapper").css("display", "none");
+	$(".about-message-img").css("display", "block");
 
 	setTimeout(function () {
 		$(".tabbed li").off("click").on("click", function () {
@@ -60,9 +63,9 @@ function DisplayHome() {
 							case 2:
 								extraPath = "Recordings";
 								break;
-							case 3:
-								extraPath = "Collections";
-								break;
+							// case 3:
+							// 	extraPath = "Collections";
+							// 	break;
 						}
 
 						newMoviesDet.forEach(function (el) {
@@ -73,24 +76,60 @@ function DisplayHome() {
 								"Subtitle: " + el.SU + "\n" +
 								"Recommended: " + el.R;
 
-							if (sectionType == 3 && el.T == 0) //collection of type "movies" ~ no poster at collection level
-							{
+							// if (sectionType == 3 && el.T == 0) //collection of type "movies" ~ no poster at collection level
+							// {
+							// 	sectionHtml +=
+							// 		"<div class=\"collectionT0-new-cover\" title=\"" + tooltip + "\">" +
+							// 			el.FN +
+							// 		"</div>";
+							// }
+							// else {
 								sectionHtml +=
-									"<div class=\"collectionT0-new-cover\" title=\"" + tooltip + "\">" +
-									el.FN +
+									"<div data-movieId='" + el.Id + "'>" +
+										"<img src=\"Imgs/" + extraPath + "/poster-" + el.Id + ".jpg\" class=\"movie-cover-new\" alt=\"Loading poster ...\" title=\"" + tooltip + "\">" +
 									"</div>";
-							}
-							else {
-								sectionHtml +=
-									"<div>" +
-									"<img src=\"Imgs/" + extraPath + "/poster-" + el.Id + ".jpg\" class=\"movie-cover-new\" alt=\"Loading poster ...\" title=\"" + tooltip + "\">" +
-									"</div>";
-							}
+							//}
 						});
 
 						sectionHtml += "</div>";
 
 						finishRenderSection(sectionHtml);
+
+						if (sectionType == 0)
+						{
+							setTimeout(function() {
+								$(".movie-cover-new").off("click").on("click", function() {
+									$("#rootNav").css("display", "none");
+									$("#moviesSections").css("display", "block");
+									$("#rootNav span").removeClass("selected-subSection");
+
+									$("#snapshotStat").html(moviesStat);
+									BuildMoviesSection(moviesData);
+
+									setTimeout(() => {
+										var movieId = $(this).parent().data("movieid");
+										
+										$("#sections-wrapper").slimScroll({
+											scrollToAnimationDuration: 500,
+											scrollTo: parseInt($("div[data-movieid='" + movieId +"']").offset().top) - 100
+										});
+
+										setTimeout(() => {
+											var movieEl = $(".movie-detail-wrapper[data-movieid=" + movieId + "]").parent();
+											movieEl.addClass("newItemClicked-highlight");
+
+											setTimeout(() => {
+												movieEl.removeClass("newItemClicked-highlight");												
+											}, 500);
+											
+										}, 1000);
+									}, 200);
+
+									$("#moviesSections span").removeClass("selected-subSection");
+									$("#moviesSections span[data-categ=17]").addClass("selected-subSection");			
+								})
+							}, 100);
+						}
 					}
 					else {
 						$("#newMovies").html("No data available!");
@@ -257,6 +296,15 @@ function HandleCancelSearch(s) {
 	}
 }
 
+function getRecommendedVal(movieVal) {
+	var result = movieVal.replace("+", "");
+	
+	if (result != "?")
+		result = result.replace("?", "");
+
+	return result;
+}
+
 function BuildMoviesSection(moviesInSection, outputToElement) {
 	var partialPath = outputToElement == null ? "Movies" : "Collections";
 
@@ -277,11 +325,15 @@ function BuildMoviesSection(moviesInSection, outputToElement) {
 			"<div class=\"movie-detail\">" +
 			(
 				el.R != ""
-					? "<a class='recommended' title='Recomandat: " + el.R + "\nClick for details ... (external link!)' href='" + el.RL + "' target='_blank'>" + el.R.replace("+", "") + "</a>"
+					? (
+						el.RL != ""
+							? "<a class='recommended recommendedWithLink' title='Recomandat: " + el.R + "\nClick for details ... (external link!)' href='" + el.RL + "' target='_blank'>" + getRecommendedVal(el.R) + "</a>"
+							: "<div class='recommended'title='Recomandat: " + el.R +"'>" + getRecommendedVal(el.R) + "</div>"
+					  )
 					: "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
 			) +
 
-			"<a class='recommended info' title='Tematica: " + (el.T == "" ? "-" : el.T) + "\nAn: " + el.Y + "\nDurata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "\nClick for details ... (external link!)' href='" + el.DL + "' target='_blank'>i</a>" +
+			"<a class='recommended info recommendedWithLink' title='Tematica: " + (el.T == "" ? "-" : el.T) + "\nAn: " + el.Y + "\nDurata: " + (el.L == "" || el.L == "00:00:00" ? "?" : el.L) + "\nClick for details ... (external link!)' href='" + el.DL + "' target='_blank'>i</a>" +
 			"<div class='quality' title='Dimensiune: " + el.S + "\nBitrate: " + el.B + "'>" + (el.Q == "" ? "SD?" : el.Q) + "</div>" +
 			"<div class='audio' title='Subtitrari: " + el.SU + "\nSursaNl: " + el.Nl + "'>" + el.A + "</div>" +
 			"</div>" +
@@ -312,6 +364,8 @@ function BuildMoviesSection(moviesInSection, outputToElement) {
 					? "Error retrieving movie title!"
 					: movieWithoutPoster[0].FN);
 			},
+
+			throttle: 250	
 		});
 
 		if (!isMobile()) {

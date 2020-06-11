@@ -7,6 +7,7 @@ function RenderCollections(){
         "<table id=\"seriesHeaderTable\" class=\"tableWrapper\">" +
         "<tr class=\"headerRow\">" +
         "<td style=\"width: 30px;\">" +
+        "<div class='c-settings' title='Options'></div>" +
         "</td>" +
         "<td>" +
         "Collection name</br>/ Element title" +
@@ -32,8 +33,8 @@ function RenderCollections(){
         "No. of elements / Theme" +
         "</td>" +
         "</tr>" +
-        "</table>" +				
-    
+        "</table>" +
+
         "<div class=\"detailsTableWrapper\">" +
             "<table id=\"seriesMainTable\" class=\"tableWrapper\">";
 
@@ -42,7 +43,7 @@ function RenderCollections(){
     collectionsData.forEach(function (col) {
         colIndex++;
         var alternateRowClass = colIndex % 2 == 0 ? " alternateRow" : "";
-        
+
         var tooltip = col.N != "" ? col.N + "\n" : "";
 
         sectionHtml +=
@@ -85,9 +86,9 @@ function RenderCollections(){
             "</td>" +
             "<td id=\"detailSerie-inner" + col.Id + "\" colspan=\"8\">" +
             "</td>" +
-            "</tr>";			
+            "</tr>";
     });
-    
+
 
     sectionHtml +=
         "</table>" +
@@ -109,6 +110,37 @@ function RenderCollections(){
         $("#sections-wrapper").slimScroll({
             height: $("#sections-wrapper").height()
         });
+
+        var getCurrentCfg = function(itemName) {
+            return localStorage.getItem(itemName) == null ? "" : "customicon";
+        }
+
+        $.contextMenu({
+            selector: '.c-settings',
+            trigger: 'left',
+            build: function($trigger, e) {
+                // this callback is executed every time the menu is to be shown
+                // its results are destroyed every time the menu is hidden
+                // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+                return {
+                    callback: function(key, options) {
+                        if (localStorage.getItem(key) == null) // ||
+                            localStorage.setItem(key, "true");
+                        else
+                            localStorage.removeItem(key);
+
+                        if ($(".expanded").length > 0)
+                            RenderCollections();
+
+                        $('[id^="detailSerie-inner"]').empty();
+                    },
+                    items: {
+                        "MoviesAsSeries": {name: "Show movie-type Collections as series", icon: getCurrentCfg("MoviesAsSeries") },
+                        //"sep1": "---------",
+                    }
+                };
+            }
+        });
     }, 100);
 }
 
@@ -116,26 +148,26 @@ function RebindCollectionsEvents() {
     $(".serialExpander").off("click").on("click", function (evt) {
         evt.stopPropagation();
         ToggleExpandCollections($(this));
-    });	
+    });
 
     $(".seriesLine.lineWithDetails").off("click").on("click", function (e) {
         ToggleExpandCollections($(this).find(".markerSymbol"));
-    }); 
-    
+    });
+
     $(".movieStillDisplay").off("click").on("click", function (evt) {
         evt.stopPropagation();
 
         if (evt.ctrlKey) {
             $(this).closest("table").find(".thRow").each(function (el) {
                 $(this).css("display", "none");
-            })        
+            })
         }
         else
         {
             var currentRow = $(this).closest("tr");
             var episodeId = currentRow.data("episodeid");
             var thumbnailRow = $("#th-" + episodeId);
-    
+
             if (thumbnailRow.length > 0) //it was previously generated
             {
                 if ($(thumbnailRow).css("display") == "none")
@@ -162,12 +194,12 @@ function RebindCollectionsEvents() {
                                 "</tr>" +
                             "</table>" +
                         "</td>" +
-                    "</tr>"; 
-    
+                    "</tr>";
+
                 $(currentRow).after(thumbnailRowStr);
             }
         }
-    });    
+    });
 }
 
 function ToggleExpandCollections(s) {
@@ -182,71 +214,88 @@ function ToggleExpandCollections(s) {
     if (collectionDetailsEl.text() == "") {
 
         var collectionDetails = $.grep(collectionsElements, function (el) { return el.CId == colId });
-		
-		switch ($(s).data("viewtype")) {
-			case 0: //movie-type
-				BuildMoviesSection(collectionDetails, collectionDetailsEl);
-                break;
-                            
-			case 1: //series-type
-				var collectionDetailsS =
-                    "<table id='x1' class=\"tableWrapper\">" +
-                        "<tr>" +
-                            "<td style=\"width:250px; vertical-align: top;\">" +
-                                "<img src=\"Imgs/Collections/poster-" + colId + ".jpg\" data-movieId=\"" + colId + "\">" +                
-                            "</td>" +
-                            "<td style=\"vertical-align: top;\">" +
-                                "<table id='x2' class=\"tableWrapper\">";                    
-                            
-				collectionDetails.forEach(function (episode) {
-					collectionDetailsS +=
-						"<tr class=\"episoadeLine\" data-colId=\"" + colId + "\" data-episodeId=\"" + episode.Id + "\">" +
-                            "<td>" +
-                                episode.FN +
-                            "</td>" +
-                            "<td class=\"detailCell w25\">" +
-                                (episode.Th == 0
-                                    ? ""
-                                    : "<img src=\"Images\\thumbnail.png\" class=\"infoSign movieStillDisplay\" style=\"cursor: pointer;\" title=\"Click to expand/collapse the thumbnails section for this file.\nPress CTRL while clicking to expand/collapse all sections in the current season.\" alt=\"^\">"
-                                ) +
-                            "</td>" +
-                            "<td class=\"detailCell w100\">" +
-                            "</td>" +
-                            "<td class=\"detailCell w80\">" +
-                                episode.Q +
-                            "</td>" +
-                            "<td class=\"detailCell w100\">" +
-                                episode.S +
-                            "</td>" +
-                            "<td class=\"detailCell w100\">" +
-                                episode.A +
-                            "</td>" +
-                            "<td class=\"detailCell w125\">" +
-                                episode.Y +
-                            "</td>" +
-                            "<td class=\"detailCell w123\">" +
-                                episode.T +
-                            "</td>" +
-						"</tr>";
-                });
-                
-				collectionDetailsS +=
-                    "</table>" +
-                    "</td>" +
-                    "</tr>" +
-                    "</table>";
 
-				$(collectionDetailsEl).html(collectionDetailsS);
-                
-                //to bind the thumbnail img click events
-                setTimeout(function () {
-                    RebindCollectionsEvents();
-                }, 100);
+        if ($(s).data("viewtype") == 1 || localStorage.getItem("MoviesAsSeries") != null) //series-type OR movies-type configured to run as series-type
+        {
+            var collectionDetailsS =
+                "<table id='x1' class=\"tableWrapper\">" +
+                    "<tr>" +
+                        "<td style=\"width:250px; vertical-align: top;\">";
 
-				break;
+            if ($(s).data("viewtype") == 1)
+            {
+                collectionDetailsS +=
+                            "<img src=\"Imgs/Collections/poster-" + colId + ".jpg\" data-movieId=\"" + colId + "\">";
+
+            }
+            else
+            {
+                var collectionData = $.grep(collectionsData, function (el) { return el.Id == colId });
+
+                collectionDetailsS +=
+                            "<div class='movieTypeAsSeriesTypePoster'>" +
+                                "<div class='collectionName'>" +
+                                    collectionData[0].FN +
+                                "</div>" +
+                            "</div>";
+            }
+
+            collectionDetailsS +=
+                        "</td>" +
+                        "<td style=\"vertical-align: top;\">" +
+                            "<table id='x2' class=\"tableWrapper\">";
 
 
-		}
+            collectionDetails.forEach(function (episode) {
+                collectionDetailsS +=
+                    "<tr class=\"episoadeLine\" data-colId=\"" + colId + "\" data-episodeId=\"" + episode.Id + "\">" +
+                        "<td>" +
+                            episode.FN +
+                        "</td>" +
+                        "<td class=\"detailCell w25\">" +
+                            (episode.Th == 0
+                                ? ""
+                                : "<img src=\"Images\\thumbnail.png\" class=\"infoSign movieStillDisplay\" style=\"cursor: pointer;\" title=\"Click to expand/collapse the thumbnails section for this file.\nPress CTRL while clicking to expand/collapse all sections in the current season.\" alt=\"^\">"
+                            ) +
+                        "</td>" +
+                        "<td class=\"detailCell w100\">" +
+                        "</td>" +
+                        "<td class=\"detailCell w80\">" +
+                            episode.Q +
+                        "</td>" +
+                        "<td class=\"detailCell w100\">" +
+                            episode.S +
+                        "</td>" +
+                        "<td class=\"detailCell w100\">" +
+                            episode.A +
+                        "</td>" +
+                        "<td class=\"detailCell w125\">" +
+                            episode.Y +
+                        "</td>" +
+                        "<td class=\"detailCell w123\">" +
+                            episode.T +
+                        "</td>" +
+                    "</tr>";
+            });
+
+            collectionDetailsS +=
+                "</table>" +
+                "</td>" +
+                "</tr>" +
+                "</table>";
+
+            $(collectionDetailsEl).html(collectionDetailsS);
+
+            //to bind the thumbnail img click events
+            setTimeout(function () {
+                RebindCollectionsEvents();
+            }, 100);
+        }
+        else
+        {
+            BuildMoviesSection(collectionDetails, collectionDetailsEl);
+        }
+
         toggleExpand();
     }
     else

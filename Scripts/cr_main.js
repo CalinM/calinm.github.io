@@ -126,7 +126,11 @@ function BindNavigationMenuEvents() {
                 BuildMoviesSection(moviesInSection);
                 break;
 
-            case 17:
+            case 17: //All                
+                BuildMoviesSection(moviesData);
+                break;
+
+            case 18: //All (grid)
                 SoftCloseSearch();
 
                 $("#moviesSections span").removeClass("selected-subSection");

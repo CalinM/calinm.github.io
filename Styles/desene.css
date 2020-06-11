@@ -668,7 +668,7 @@ footer {
 }
 
 .detailLine .synopsis {
-    font-size: 9pt;
+    font-size: 11pt;
     text-align: left;
     height: 100%;
     overflow: auto;
@@ -775,4 +775,60 @@ footer {
 
 .detailLine-wrapper .owl-stage .owl-item {
     height: 223px;
+}
+
+.c-settings {
+    width: 23px;
+    height: 23px;
+    background-image: url('../Images/settings16_n.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 auto;
+}
+
+    .c-settings:hover {
+        background-image: url('../Images/settings16_h.png');
+        cursor: pointer;
+    }
+
+.context-menu-item.context-menu-icon-customicon {
+    padding: 5px 20px;
+}
+
+    .context-menu-item.context-menu-icon-customicon::before {
+        content: '✓';
+        font-size: 90% !important;
+        display: inline-block;
+        width: 20px;
+        color: black;
+        font-weight: bold;
+    }
+
+.context-menu-item {
+    font-family: Verdana;
+    font-size: 80%;
+}
+
+    .context-menu-item.context-menu-hover {
+        background-color: #111 !important;
+        opacity: 0.9;
+    }
+
+.movieTypeAsSeriesTypePoster {
+    height: 388px;
+    width: 248px;
+    border: solid thin silver;
+    background: whitesmoke;
+}
+
+    .movieTypeAsSeriesTypePoster .collectionName {
+        font-family: 'Mouse Memoirs', sans-serif;
+        font-size: 25pt;
+        text-align: center;
+        width: 100%;
+        padding-top: 50px;
+    }
+
+.newItemClicked-highlight {
+    box-shadow: rgba(139,0,0, 0.9) 0px 0px 25px!important;
 }

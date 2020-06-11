@@ -69,9 +69,15 @@ function RenderSeriesTypeView() {
                     "</a>" +
                 "</td>" +
                 "<td class=\"detailCell w100\">" +
-                    (serial.R != ""
-                        ? "<a class='recommended' style='float: unset; margin: 0px;' title='Recomandat: " + serial.R + "\nClick for details ... (external link!)' href='" + serial.RL + "' target='_blank'>" + serial.R.replace("+", "") + "</a>"
-                        : "<div class='recommended' style='float: unset; margin: 0px;' title='Recomandare necunoscuta'>?</div>") +
+                    (
+                        serial.R != ""
+                        ? (
+                            serial.RL != ""
+                                ? "<a class='recommended recommendedWithLink' title='Recomandat: " + serial.R + "\nClick for details ... (external link!)' href='" + serial.RL + "' target='_blank'>" + getRecommendedVal(serial.R) + "</a>"
+                                : "<div class='recommended'title='Recomandat: " + serial.R +"'>" + getRecommendedVal(serial.R) + "</div>"
+                          )
+                        : "<div class='recommended' title='Recomandare necunoscuta'>?</div>"
+                    ) +
                 "</td>" +
                 "<td class=\"detailCell w80\">" +
                     serial.Q +
