@@ -17,6 +17,11 @@ var waitForFinalEvent = (function () {
 function DisplayHome() {
 	SoftCloseSearch();
 
+	$("#moviesSections").css("display", "none");
+	$("#moviesSections span").removeClass("selected-subSection");
+	$("#rootNav").css("display", "block");
+
+
 	$("#sections-wrapper").html($("#homePageContent").html());
 	$("#moviesSections span").removeClass("selected-subSection");
 	$(".about-message-img").css("display", "");
@@ -601,3 +606,28 @@ function onPlayerStateChange(event) {
 			break;
 	}
 }
+
+/*
+function checkImage(src, good, bad, colId) {
+    var img = new Image();
+	img.onload = good(colId); 
+	img.onerror = bad(colId);
+    img.src = src;	
+}
+*/
+/*
+const getImageOrFallback = (path, good, bad) => {
+	return new Promise(resolve => {
+	  const img = new Image();
+	  img.src = path;
+	  img.onload = () => resolve(good);
+	  img.onerror = () => resolve(bad);
+	});
+  };
+
+const link = getImageOrFallback(
+	"Imgs/Collections/poster-" + colId + ".jpg",
+	'exista',
+	'nu exista'
+	).then(result => collectionDetailsS += result)
+*/

@@ -107,9 +107,6 @@ function RenderCollections(){
         $(".detailsTableWrapper").slimScroll({
             height: h
         });
-        $("#sections-wrapper").slimScroll({
-            height: $("#sections-wrapper").height()
-        });
 
         var getCurrentCfg = function(itemName) {
             return localStorage.getItem(itemName) == null ? "" : "customicon";
@@ -129,8 +126,14 @@ function RenderCollections(){
                         else
                             localStorage.removeItem(key);
 
-                        if ($(".expanded").length > 0)
+                        if ($(".expanded").length > 0) {
                             RenderCollections();
+                            
+                            setTimeout(function() {
+                                $(".detailsTableWrapper").mouseover();
+                            }, 100);
+                            
+                        }                            
 
                         $('[id^="detailSerie-inner"]').empty();
                     },
@@ -222,11 +225,31 @@ function ToggleExpandCollections(s) {
                     "<tr>" +
                         "<td style=\"width:250px; vertical-align: top;\">";
 
+            /*
+            this happends before "<table id='x1' class=\"tableWrapper\">" +
+            checkImage(
+                "Imgs/Collections/poster-" + colId + ".jpg",
+                function(id) {
+                    debugger;
+                    collectionDetailsS += "<img src=\"Imgs/Collections/poster-" + id + ".jpg\" data-movieId=\"" + id + "\">";
+                },
+                function(id) {
+                    var collectionData = $.grep(collectionsData, function (el) { return el.Id == id });
+                    debugger;
+                    collectionDetailsS += "<div class='movieTypeAsSeriesTypePoster'>" +
+                                "<div class='collectionName'>" +
+                                    collectionData[0].FN +
+                                "</div>" +
+                            "</div>";
+                },
+                colId);
+            */
+
+            /*
             if ($(s).data("viewtype") == 1)
             {
                 collectionDetailsS +=
                             "<img src=\"Imgs/Collections/poster-" + colId + ".jpg\" data-movieId=\"" + colId + "\">";
-
             }
             else
             {
@@ -239,6 +262,10 @@ function ToggleExpandCollections(s) {
                                 "</div>" +
                             "</div>";
             }
+            */
+
+           collectionDetailsS +=
+                            "<img src=\"Imgs/Collections/poster-" + colId + ".jpg\" data-movieId=\"" + colId + "\">";            
 
             collectionDetailsS +=
                         "</td>" +
