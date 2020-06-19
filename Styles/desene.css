@@ -46,7 +46,7 @@ html, body {
     /*padding-right: 75px;*/
 }
 
-.search-wrapper {
+.header-button-wrapper {
     display: table-cell;
     width: 40px;
     vertical-align: middle;
@@ -586,7 +586,7 @@ footer {
 
 
 
-.homeButton {
+.headerButton {
     border-radius: 10em;
     border: solid 1px rgba(255,86,39,1);
     width: 38px;
@@ -598,11 +598,11 @@ footer {
     cursor: pointer;
 }
 
-    .homeButton div {
+    .headerButton div {
         padding-top: 4px;
     }
 
-    .homeButton:hover {
+    .headerButton:hover {
         background-color: #fff;
     }
 
@@ -792,26 +792,25 @@ footer {
     }
 
 .context-menu-item.context-menu-icon-customicon {
-    padding: 5px 20px;
+    /* padding: 5px 20px; */
 }
 
     .context-menu-item.context-menu-icon-customicon::before {
         content: '✓';
         font-size: 90% !important;
         display: inline-block;
-        width: 20px;
+        /* width: 20px; */
         color: black;
         font-weight: bold;
     }
 
 .context-menu-item {
     font-family: Verdana;
-    font-size: 80%;
+    font-size: 10pt;
 }
 
     .context-menu-item.context-menu-hover {
-        background-color: #111 !important;
-        opacity: 0.9;
+        background-color: #414a4c !important;
     }
 
 .movieTypeAsSeriesTypePoster {

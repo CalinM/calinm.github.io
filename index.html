@@ -8,8 +8,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mountains+of+Christmas|Yanone+Kaffeesatz:700">
 
-<link type="text/css" rel="stylesheet" href="Styles/desene.css?version=2.1.1515.3816" />
-<link type="text/css" rel="stylesheet" href="Styles/sections.css?version=2.1.1515.3816" />
+<link type="text/css" rel="stylesheet" href="Styles/desene.css?version=2.1.1547.3822" />
+<link type="text/css" rel="stylesheet" href="Styles/sections.css?version=2.1.1547.3822" />
 <link type="text/css" rel="stylesheet" href="Styles/jsgrid.min.css" />
 <link type="text/css" rel="stylesheet" href="Styles/jsgrid-theme.min.css" />
 <!--<link type="text/css" rel="stylesheet" href="Styles/YouTubePopUp.css">-->
@@ -29,18 +29,18 @@
 
 <script src="https://www.youtube.com/player_api"></script>
 
-<script type="text/javascript" src="Scripts/cr_shared.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/cr_main.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/cr_movies.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/cr_series.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/cr_collections.js?version=2.1.1515.3816"></script>
+<script type="text/javascript" src="Scripts/cr_shared.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/cr_main.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/cr_movies.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/cr_series.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/cr_collections.js?version=2.1.1547.3822"></script>
 
-<script type="text/javascript" src="Scripts/moviesDetails.js?version=2.1.1515.3816"></script>    <!--this get's versioned in app -->
-<script type="text/javascript" src="Scripts/seriesDetails.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/recordingDetails.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/moviesDetails2.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/collectionDetails.js?version=2.1.1515.3816"></script>
-<script type="text/javascript" src="Scripts/collectionDetails2.js?version=2.1.1515.3816"></script>
+<script type="text/javascript" src="Scripts/moviesDetails.js?version=2.1.1547.3822"></script>    <!--this get's versioned in app -->
+<script type="text/javascript" src="Scripts/seriesDetails.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/recordingDetails.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/moviesDetails2.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/collectionDetails.js?version=2.1.1547.3822"></script>
+<script type="text/javascript" src="Scripts/collectionDetails2.js?version=2.1.1547.3822"></script>
 
 <div>
     <div class="master-toolbar">
@@ -51,12 +51,19 @@
             <div class="title-wrapper">
                 Cartoons Repository
             </div>
-            <div class="search-wrapper">
-                <div class="homeButton">
+            <div id="moviesSort" class="header-button-wrapper" style="display: none;">
+                <div id="sortButton" class="headerButton">
+                    <div style="padding-top: 9px;">
+                        <img src="Images\settings24_n.png" style="height: 20px; width: 20px;">
+                    </div>            
+                </div>
+            </div>
+            <div class="header-button-wrapper">
+                <div id="homeButton" class="headerButton">
                     <div>🏠</div>
                 </div>
             </div>
-            <div class="search-wrapper">
+            <div class="header-button-wrapper">
                 <input id="searchCtrl" class="searchImg" type="search" placeholder="Search all sections ...">
             </div>
         </div>
@@ -71,19 +78,6 @@
         <span data-categ="2">TV Shows</span>
         <span data-categ="3">Recordings (Raw)</span>
         <span data-categ="4">Collections (Mix)</span>
-    </div>
-    <div id="moviesSections" style="display: none;">
-        <span data-categ="-1">back</span>
-        <div>Sections:</div>
-        <span data-categ="10" data-titleStartWith="0,1,2,3,4,5,6,7,8,9">0 ... 9</span>
-        <span data-categ="11" data-titleStartWith="A,B,C">A ... C</span>
-        <span data-categ="12" data-titleStartWith="D,E,F,G,H">D ... H</span>
-        <span data-categ="13" data-titleStartWith="I,J,K,L,M,N">I ... N</span>
-        <span data-categ="14" data-titleStartWith="O,P,R,Q,S">O ... S</span>
-        <span data-categ="15" data-titleStartWith="T">T</span>
-        <span data-categ="16" data-titleStartWith="U,V,W,X,Y,Z">U ... Z</span>
-        <span data-categ="17">All</span>
-        <span data-categ="18">All (grid)</span>
     </div>
 </div>
 
@@ -113,7 +107,7 @@
         </br>
         This is a personal index used exclusivelly by me, my family and my friends.
         </br>
-        Feel free to contact me at c*************u@g***l.com
+        Feel free to contact me at c****.********u@gmail.com
     </div>
 
     <div id="mobileWarning" class="owl-carousel owl-theme">
