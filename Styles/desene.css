@@ -161,6 +161,11 @@ footer {
     font-family: Verdana;
 }
 
+.footer-filtered {
+    background-color: darkred;
+}
+
+
 #sections-wrapper {
     width: 100%;
     text-align: center;
