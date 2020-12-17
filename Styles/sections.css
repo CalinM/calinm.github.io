@@ -56,13 +56,25 @@ html, body {
 }
 
 .cardM {
-    width: 400px;
-    max-width: 400px !important;
+    position: relative;
+    background: #fefff9;
+    color: #363636;
+    text-decoration: none;
+    -moz-box-shadow: rgba(0, 0, 0, 0.19) 0 0 8px 0;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.19) 0 0 8px 0;
+    box-shadow: rgba(0, 0, 0, 0.19) 0 0 8px 0;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    width: 250px;
+
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
-    .cardM:nth-child(3n) {
+    /* .cardM:nth-child(3n) {
         margin-right: 20px !Important;
-    }
+    } */
 
 
 .card:hover, .card:focus {

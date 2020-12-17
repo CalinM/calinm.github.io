@@ -836,3 +836,60 @@ footer {
 .newItemClicked-highlight {
     box-shadow: rgba(139,0,0, 0.9) 0px 0px 25px!important;
 }
+
+.series-quality-m {
+    color: white;
+    white-space: nowrap;
+    padding-right: 10px;    
+}
+
+.series-title-row-m {
+    background: black;
+}
+
+.recommended-cell {
+    width: 50px;
+    padding-right: 10px;  
+}
+
+.recommended-m {
+    font: 32px Arial, sans-serif;
+
+    width: 1.5em;
+    height: 1.5em;
+    box-sizing: initial;
+    
+    border: 0.1em solid white;
+    color: white;
+    text-align: center;
+    border-radius: 50%;    
+    
+    line-height: 1.5em;
+    box-sizing: content-box;   
+
+    float: right;
+}
+
+.season-cell-m {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 3px;
+    background: #DCDCDC;
+    font-weight: bold;    
+}
+
+.episode-title-cell-m {
+    padding-left: 5px;
+    width: 100%;
+}
+.episodes-audio-m {
+    white-space: nowrap;
+    padding-right: 10px;
+}
+/* .episodeDetailExpanded > td:first{
+    color: red;
+}  */
+
+.episode-details-open {
+    color: red;
+}
