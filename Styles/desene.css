@@ -222,9 +222,9 @@ footer {
     cursor: help;
 }
 
-#mobileWarning {
+/* #mobileWarning {
     margin-top: 20px;
-}
+} */
 
 
 #searchCtrl {
@@ -436,6 +436,28 @@ footer {
     width: 75%;
     margin: 0 auto;
     padding-top: 10px;
+}
+
+.newMoviesM {
+    width: 75%;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+.newSectionTitleM {
+    text-align: center;
+    font-weight: bold;
+    font-size: 150%;
+    /* border-bottom: solid thin silver; */
+}
+.sectionTitleSeparator {
+    /* background: -webkit-linear-gradient(left, rgba(92, 7, 52, 1) 0%, rgba(134, 29, 84, 1) 12%, rgba(255, 93, 177, 1) 47%, rgba(83, 0, 30, 1) 100%); */
+    background: -webkit-linear-gradient(left, white 0%, silver 50%, white 100%);
+    height: 1px;
+    /* width: 500px; */
+    /* position: absolute; */
+    /* bottom: 0; */
 }
 
 .movie-cover-new {
