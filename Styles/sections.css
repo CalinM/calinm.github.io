@@ -486,3 +486,14 @@ html, body {
     border: solid thin gray;
     border-radius: 5px;
 }
+
+/* .color: white; margin-top: 20px; background: black; padding-top: 5px; padding-bottom: 5px; */
+
+.searchResultHeader {
+    margin-top: 20px;
+    margin-bottom: -20px;
+    background: navajowhite;
+    font-size: 11pt;
+	font-weight: bold;
+	padding: 3px;
+}
