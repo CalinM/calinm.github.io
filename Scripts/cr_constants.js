@@ -1,0 +1,2 @@
+const christmasSymbol = " 🎅" //🎄
+const helloweenSymbol = " 🎃"
